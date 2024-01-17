@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/app.css">
+    <title>Sign In</title>
+</head>
+<body>
+    <header></header>
+    <main class="col-12">
+        <section class="form-container1 mx-auto">
+            <div class="form-container1-div pt-2">
+                <div class="div-logo d-flex flex-column align-items-center">
+                    <div>
+                        <img src="/imgs/logo-icon.png">
+                    </div>
+                    <span class="d-text">Meladen Properties ltd</span>
+                </div>
+                <div class="form-container2 d-flex flex-column align-items-center justify-content-center">
+                    <h2>Staff Login</h2>
+                    <form th:method="POST" th:action="@{/meladen/login}" class="col-md-8 d-flex flex-column justify-content-between">
+                        <div class="div-input-group col-12 d-flex justify-content-between">
+                            <label class="d-text col-4" for="username">Email</label>
+                            <input class="col-7 text-center" name="username" id="username" placeholder="johndoe@example.com" style="height: 28px;"/>
+                        </div>
+                        <div class="div-input-group col-12 d-flex justify-content-between">
+                            <label class="d-text col-4" for="password">Password</label>
+                            <input class="col-7 text-center" name="password" id="password" type="password" style="height: 28px;"/>
+                        </div>
+                        <div>
+                            <input class="btn submit-btn" type="submit" value="Sign In"/>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer></footer>
+    <script src="/js/app.js"></script>
+</body>
+</html>
