@@ -7,4 +7,5 @@ public interface StaffService {
     String registerStaff(StaffDto staff);
     String staffSetPasswordMail(String eMail);
     String saveStaffPassword(IdnPassword idnPassword);
+    StaffDto findUserByEmail(String email);
 }

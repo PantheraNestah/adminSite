@@ -17,12 +17,14 @@ public class Staff {
     private Long id;
     @Column(name = "name", nullable = false, length = 100)
     private String name;
-    @Column(name = "email", nullable = false, length = 100)
+    @Column(name = "email", unique = true, nullable = false, length = 100)
     private String email;
     @Column(name = "phone", length = 14)
     private String phone;
     @Column(name = "password")
     private String password;
+    @Column(name = "role", length = 6)
+    private String role;
     @Lob
     @Column(name = "photo", columnDefinition = "BLOB")
     private byte[] profileImage;

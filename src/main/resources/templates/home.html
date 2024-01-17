@@ -68,7 +68,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center" th:href="@{/home/staff}">
+                            <a class="nav-link d-flex align-items-center" th:href="@{/meladen/staff/all(admin=${param.admin})}">
                                 <i class="bi bi-shield-fill-exclamation btsp-icons me-2"></i> Staff
                             </a><!-- 
                             <div class="collapse mini-menu" id="staff-menu">
@@ -101,9 +101,9 @@
                     <div class="div-co-name">
                         <h1>Meladen Properties ltd</h1>
                     </div>
-                    <div class="dropdown col-2 d-flex justify-content-end">
+                    <div class="col-2 d-flex justify-content-end">
                         <div class="d-flex col-7 justify-content-between">
-                            <a href="" class="me-2 f-6">
+                            <a th:href="@{/meladen/logout}" class="me-2 f-6">
                                 <span><i class="bi bi-box-arrow-right btsp-icons f-5"></i></span>
                             </a>
                             <a class="me-2 f-6" role="button" href="#notificationsOffcanvas" data-bs-toggle="offcanvas" aria-controls="notificationsOffcanvas">

@@ -26,7 +26,7 @@ public class PagesController {
     public String renderHomePage(){
         return ("home");
     }
-    @GetMapping("/meladen/staff")
+    @GetMapping("/meladen/staff/all")
     public String renderStaffPage(){
         return ("staff");
     }
