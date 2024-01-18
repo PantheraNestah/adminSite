@@ -6,21 +6,22 @@ import com.springBoot.adminSite.Repository.ProjectRepo;
 import com.springBoot.adminSite.Service.ClientService;
 import com.springBoot.adminSite.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
 public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private ProjectRepo projectRepo;
     @Autowired
-    private Project projectEntity;
-    @Autowired
     private ProjectDto projectDtoMain;
     @Autowired
-    ClientService clientService;
+    private ClientService clientService;
     @Override
     public String registerProject(ProjectDto projectDto) {
+        Project projectEntity = new Project();
         projectEntity.setName(projectDto.getName());
         projectEntity.setValue(projectDto.getValue());
         projectEntity.setPhoto(projectDto.getPhoto());

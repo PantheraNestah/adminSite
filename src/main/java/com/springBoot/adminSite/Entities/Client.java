@@ -17,9 +17,9 @@ public class Client {
     private Long id;
     @Column(name = "name", length = 100, nullable = false)
     private String name;
-    @Column(name = "name", length = 100, nullable = false, unique = true)
+    @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
-    @Column(name = "name", length = 100, nullable = false, unique = true)
+    @Column(name = "phone", length = 100, nullable = false, unique = true)
     private String phone;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
