@@ -506,6 +506,7 @@ main .current-staff .prof-body .info-container a.btn {
   background-color: #ffe5d0;
   margin-top: 1rem;
   height: 22rem;
+  position: relative;
 }
 .div-quick-acc .offcanvas .staff-details {
   padding-top: 3rem;
@@ -572,7 +573,6 @@ main .current-staff .prof-body .info-container a.btn {
 
 .modal-form {
   height: 270px;
-  width: 300px;
 }
 .modal-form label {
   width: 100px;
@@ -624,17 +624,21 @@ main .current-staff .prof-body .info-container a.btn {
 }
 
 .clientModal .modal-form {
-  height: 270px;
+  height: 340px;
 }
 .clientModal .modal-form form {
   height: 250px;
 }
 
 .prodModal .modal-form {
-  height: 150px;
+  height: 280px;
 }
 .prodModal .modal-form form {
-  height: 120px;
+  height: 180px;
+}
+
+.messageModal .modal-form {
+  height: 320px;
 }
 
 footer {

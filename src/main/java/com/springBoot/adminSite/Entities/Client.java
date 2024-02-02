@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
 @Table(name = "clients")
 @Data
@@ -21,6 +23,9 @@ public class Client {
     private String email;
     @Column(name = "phone", length = 100, nullable = false, unique = true)
     private String phone;
+    @Column(name = "date_added")
+    @Temporal(TemporalType.DATE)
+    private Date registrationDate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;

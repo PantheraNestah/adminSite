@@ -22,11 +22,21 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public String registerProject(ProjectDto projectDto) {
         Project projectEntity = new Project();
-        projectEntity.setName(projectDto.getName());
-        projectEntity.setValue(projectDto.getValue());
+        projectEntity.setName(projectDto.getProdName());
+        projectEntity.setValue(projectDto.getProdValue());
         projectEntity.setPhoto(projectDto.getPhoto());
+        projectEntity.setDateCreated(projectDto.getCreationDate());
         projectRepo.save(projectEntity);
         return ("Project Registration Successful");
+    }
+
+    @Override
+    public String registerProjects(List<ProjectDto> projectDtoList) {
+        List<Project> projects = projectDtoList.stream()
+                .map(this::mapDtoToEntity)
+                .toList();
+        projectRepo.saveAll(projects);
+        return ("Projects Registration successful");
     }
 
     @Override
@@ -40,14 +50,20 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectDto mapEntityToDto(Project projectEntity){
         ProjectDto projectDto = new ProjectDto();
         projectDto.setId(projectEntity.getId());
-        projectDto.setName(projectEntity.getName());
-        projectDto.setValue(projectEntity.getValue());
+        projectDto.setProdName(projectEntity.getName());
+        projectDto.setProdValue(projectEntity.getValue());
         projectDto.setPhoto(projectEntity.getPhoto());
-        projectDto.setClientDtos(
-                projectEntity.getClients().stream()
-                        .map(entity -> clientService.mapEntityToDto(entity))
-                        .collect(Collectors.toList())
-        );
+        projectDto.setCreationDate(projectEntity.getDateCreated());
+        projectDto.setClientDtos(clientService.retrieveByProjId(projectEntity.getId()));
         return (projectDto);
+    }
+    public Project mapDtoToEntity(ProjectDto projectDto){
+        Project projectEntity = new Project();
+        projectEntity.setId(projectDto.getId());
+        projectEntity.setName(projectDto.getProdName());
+        projectEntity.setValue(projectDto.getProdValue());
+        projectEntity.setPhoto(projectDto.getPhoto());
+        projectEntity.setDateCreated(projectDto.getCreationDate());
+        return (projectEntity);
     }
 }

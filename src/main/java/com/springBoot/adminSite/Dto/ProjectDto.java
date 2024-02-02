@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -13,8 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 public class ProjectDto {
     private Long id;
-    private String name;
-    private Long value;
+    private String prodName;
+    private Long prodValue;
     private Byte[] photo;
+    private Date creationDate;
     private List<ClientDto> clientDtos;
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -39,7 +40,6 @@ public class Apis {
     public ResponseEntity<HttpResponse> registerProject(@RequestBody ProjectDto projectDto)
     {
         String msg = projectService.registerProject(projectDto);
-
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()
                         .message(msg)
@@ -49,6 +49,20 @@ public class Apis {
                         .build()
                 )
             );
+    }
+    @PostMapping("/api/projects/new/many")
+    public ResponseEntity<HttpResponse> registerProjects(@RequestBody List<ProjectDto> projectDtos)
+    {
+        String msg = projectService.registerProjects(projectDtos);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
     }
     @PostMapping("/api/clients/new")
     public ResponseEntity<HttpResponse> registerClient(@RequestBody ClientDto clientDto)

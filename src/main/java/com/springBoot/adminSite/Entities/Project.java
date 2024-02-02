@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -24,6 +25,9 @@ public class Project {
     @Lob
     @Column(name = "photo", columnDefinition = "BLOB")
     private Byte[] photo;
+    @Column(name = "date_created")
+    @Temporal(TemporalType.DATE)
+    private Date dateCreated;
     @OneToMany(mappedBy = "project")
     private List<Client> clients;
 

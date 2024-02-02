@@ -1,5 +1,97 @@
+const apiEndPoint = "http://localhost:8080/api/"
 
-/* import echarts from 'echarts' */
+var projDtos = []
+
+var fetchAllProjs = async() => {
+    var projPromise = await fetch(
+        `${apiEndPoint}projects/all`,
+        {
+            method: "GET"
+        }
+    )
+    const respBody = await projPromise.json()
+    return (respBody)
+}
+var projectsDataTable = $("#projTable").DataTable(
+    {
+        select: {
+            style: "multi",
+            selector: 'td:first-child input:checkbox',
+            selectAll: true
+        },
+        pagingType: "simple",
+        pageLength: 8,
+        data: projDtos,
+        columns: [
+            {data: "id"},
+            {data: "name"},
+            {data: "value"},
+            {data: "clients"}
+        ]
+    }
+)
+fetchAllProjs().then(
+    (response) => {
+        projDtos = response.data.projects
+        projectsArea.populateObjects()
+        projectsDataTable.clear().rows.add(projectsArea.projObjects).draw()
+    }
+)
+
+var projectsArea = {
+    projDtos: projDtos,
+    projObjects: [],
+    populateObjects: function() {
+        for (let i = 0;i < this.projDtos.length;i++){
+            var obj = {
+                "id": this.projDtos[i].id,
+                "name": this.projDtos[i].prodName,
+                "value": `${this.projDtos[i].prodValue / 1000000} M`,
+                "clients": this.projDtos[i].clientDtos.length,
+            }
+            this.projObjects.push(obj)
+        }
+    },
+    registerProject: function() {
+        document.getElementById("prodModal").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            fetch(
+                `${apiEndPoint}meladen/projects/new`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.getElementById("prodModal").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("prodModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                    document.getElementById("prodModal").querySelector("form").reset()
+                }
+                else
+                {
+                    document.getElementById("prodModal").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("prodModal").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+        })
+    }
+}
+
 
 var projNamesArray = [
     "Other Projects' clients",
@@ -166,24 +258,6 @@ $(document).ready(() => {
                 {data: "name"},
                 {data: "email"},
                 {data: "phone"}
-            ]
-        }
-    )
-    $("#projTable").DataTable(
-        {
-            select: {
-                style: "multi",
-                selector: 'td:first-child input:checkbox',
-                selectAll: true
-            },
-            pagingType: "simple",
-            pageLength: 8,
-            data: projsArray,
-            columns: [
-                {data: "id"},
-                {data: "name"},
-                {data: "value"},
-                {data: "clients"}
             ]
         }
     )
