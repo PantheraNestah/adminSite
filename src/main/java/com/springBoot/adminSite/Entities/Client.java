@@ -21,7 +21,7 @@ public class Client {
     private String name;
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
-    @Column(name = "phone", length = 100, nullable = false, unique = true)
+    @Column(name = "phone", length = 100, nullable = false)
     private String phone;
     @Column(name = "date_added")
     @Temporal(TemporalType.DATE)

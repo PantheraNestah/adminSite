@@ -1,122 +1,8 @@
 const apiEndPoint = "http://localhost:8080/api/"
 
 var projDtos = []
-
-var fetchAllProjs = async() => {
-    var projPromise = await fetch(
-        `${apiEndPoint}projects/all`,
-        {
-            method: "GET"
-        }
-    )
-    const respBody = await projPromise.json()
-    return (respBody)
-}
-var projectsDataTable = $("#projTable").DataTable(
-    {
-        select: {
-            style: "multi",
-            selector: 'td:first-child input:checkbox',
-            selectAll: true
-        },
-        pagingType: "simple",
-        pageLength: 8,
-        data: projDtos,
-        columns: [
-            {data: "id"},
-            {data: "name"},
-            {data: "value"},
-            {data: "clients"}
-        ]
-    }
-)
-fetchAllProjs().then(
-    (response) => {
-        projDtos = response.data.projects
-        projectsArea.populateObjects()
-        projectsDataTable.clear().rows.add(projectsArea.projObjects).draw()
-    }
-)
-
-var projectsArea = {
-    projDtos: projDtos,
-    projObjects: [],
-    populateObjects: function() {
-        for (let i = 0;i < this.projDtos.length;i++){
-            var obj = {
-                "id": this.projDtos[i].id,
-                "name": this.projDtos[i].prodName,
-                "value": `${this.projDtos[i].prodValue / 1000000} M`,
-                "clients": this.projDtos[i].clientDtos.length,
-            }
-            this.projObjects.push(obj)
-        }
-    },
-    registerProject: function() {
-        document.getElementById("prodModal").addEventListener("submit", (form) => {
-            form.preventDefault()
-            const formData = new FormData(form.target)
-            const jsonData = {}
-            formData.forEach((value, key) => {
-                jsonData[key] = value
-            })
-            fetch(
-                `${apiEndPoint}meladen/projects/new`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(jsonData)
-                }
-            ).then((response) => {
-                return response.json()
-            }).then((data) => {
-                if (data.statusCode === 201)
-                {
-                    document.getElementById("prodModal").querySelector(".success").classList.replace("d-none", "d-flex")
-                    setTimeout(() => {
-                        document.getElementById("prodModal").querySelector(".success").classList.replace("d-flex", "d-none")
-                    }, 3800)
-                    document.getElementById("prodModal").querySelector("form").reset()
-                }
-                else
-                {
-                    document.getElementById("prodModal").querySelector(".failure").classList.replace("d-none", "d-flex")
-                    setTimeout(() => {
-                        document.getElementById("prodModal").querySelector(".failure").classList.replace("d-flex", "d-none")
-                    }, 3800)
-                }
-            })
-        })
-    }
-}
-
-
-var projNamesArray = [
-    "Other Projects' clients",
-    "Urban Oasis Realty", 
-    "Haven Homes", "Villagreen Homes", 
-    "Downtown Eden", "Cityscape Properties", 
-    "Oakwood Real Estate", "Maplewood Realty",
-    "Harmony Homes", "Mountain View Realty",
-    "Parkside Properties"
-]
-var projSelectObj = {
-    selectElem: document.getElementById("projectsList"),
-    projNames: projNamesArray,
-    optionsFunc: function(){
-        this.projNames.forEach((item)=>{
-            var opt = document.createElement("option")
-            opt.innerText = item
-            this.selectElem.appendChild(opt)
-        })
-    }
-}
-document.addEventListener('DOMContentLoaded', function() {
-    projSelectObj.optionsFunc()
-})
-
+var clientDtos = []
+var projectsNames = []
 var clientsArray = [
     {
         "id":"1",
@@ -179,6 +65,176 @@ var clientsArray = [
         "phone":"+254798765432"
     }
 ]
+
+var fetchAllProjs = async() => {
+    var projPromise = await fetch(
+        `${apiEndPoint}projects/all`,
+        {
+            method: "GET"
+        }
+    )
+    const respBody = await projPromise.json()
+    return (respBody)
+}
+fetchAllProjs().then(
+    (response) => {
+        projDtos = response.data.projects
+        projectsArea.populateObjects()
+        var projectsDataTable = $("#projTable").DataTable(
+            {
+                select: {
+                    style: "multi",
+                    selector: 'td:first-child input:checkbox',
+                    selectAll: true
+                },
+                pagingType: "simple",
+                pageLength: 8,
+                data: projectsArea.projObjects,
+                columns: [
+                    {data: "id"},
+                    {data: "name"},
+                    {data: "value"},
+                    {data: "clients"}
+                ]
+            }
+        )
+        var clientsDataTable = $("#clientsTable").DataTable(
+            {
+                select: {
+                    style: "multi",
+                    selector: 'td:first-child input:checkbox',
+                    selectAll: true
+                },
+                pagingType: "simple",
+                pageLength: 8,
+                data: projDtos[0].clientDtos,
+                columns: [
+                    {data: "id"},
+                    {data: "name"},
+                    {data: "email"},
+                    {data: "phone"}
+                ]
+            }
+        )
+        clientsArea.selectOpts()
+        clientsArea.updateTableOnSelect(clientsDataTable)
+    }
+)
+
+var projectsArea = {
+    projDtos: projDtos,
+    projObjects: [],
+    projectsNamesArray: [],
+    populateObjects: function() {
+        for (let i = 0;i < projDtos.length;i++){
+            this.projectsNamesArray.push(projDtos[i].prodName)
+            var obj = {
+                "id": projDtos[i].id,
+                "name": projDtos[i].prodName,
+                "value": `${projDtos[i].prodValue / 1000000}M`,
+                "clients": projDtos[i].clientDtos.length,
+            }
+            this.projObjects.push(obj)
+        }
+    },
+    registerProject: function() {
+        document.getElementById("prodModal").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            fetch(
+                `${apiEndPoint}meladen/projects/new`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.getElementById("prodModal").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("prodModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                    document.getElementById("prodModal").querySelector("form").reset()
+                }
+                else
+                {
+                    document.getElementById("prodModal").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("prodModal").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+        })
+    }
+}
+
+var clientsArea = {
+    clientDtos: [],
+    clientObjects: [],
+    selectElem: document.getElementById("projectsList"),
+    selectOpts: function() {
+        /* projectsArea.projectsNamesArray.forEach((name) => {
+            var opt = document.createElement("option")
+            opt.innerText = name
+            this.selectElem.appendChild(opt)
+        }) */
+        for (let i = 0;i < projectsArea.projectsNamesArray.length;i++){
+            var opt = document.createElement("option")
+            opt.innerText = projectsArea.projectsNamesArray[i]
+            opt.setAttribute("value", `${i}`)
+            this.selectElem.appendChild(opt)
+        }
+    },
+    updateTableOnSelect: function(table) {
+        /* var children = Array.from(this.selectElem.children)
+        children.forEach((child) => {
+            console.log(child)
+            child.addEventListener("click", () => {
+                table.clear().rows.add(projDtos[child.getAttribute("id")].clientDtos).draw()
+            })
+        }) */
+        this.selectElem.addEventListener("change", (event) => {
+            var idx = event.target.value
+            console.log(`Array of index ${idx} to be used`)
+            table.clear().rows.add(projDtos[idx].clientDtos).draw()
+        })
+    }
+}
+
+var projNamesArray = [
+    "Other Projects' clients",
+    "Urban Oasis Realty", 
+    "Haven Homes", "Villagreen Homes", 
+    "Downtown Eden", "Cityscape Properties", 
+    "Oakwood Real Estate", "Maplewood Realty",
+    "Harmony Homes", "Mountain View Realty",
+    "Parkside Properties"
+]
+var projSelectObj = {
+    selectElem: document.getElementById("projectsList"),
+    projNames: projNamesArray,
+    optionsFunc: function(){
+        this.projNames.forEach((item)=>{
+            var opt = document.createElement("option")
+            opt.innerText = item
+            this.selectElem.appendChild(opt)
+        })
+    }
+}
+document.addEventListener('DOMContentLoaded', function() {
+    //projSelectObj.optionsFunc()
+})
+
+
 var projsArray = [
     {
         "id": "1",
@@ -243,24 +299,7 @@ var projsArray = [
 ]
 
 $(document).ready(() => {
-    $("#clientsTable").DataTable(
-        {
-            select: {
-                style: "multi",
-                selector: 'td:first-child input:checkbox',
-                selectAll: true
-            },
-            pagingType: "simple",
-            pageLength: 8,
-            data: clientsArray,
-            columns: [
-                {data: "id"},
-                {data: "name"},
-                {data: "email"},
-                {data: "phone"}
-            ]
-        }
-    )
+    
 })
 var clientsGraph = echarts.init(document.getElementById("clientsGraph"))
 var propGraph = echarts.init(document.getElementById("propGraph"))

@@ -78,4 +78,18 @@ public class Apis {
                 )
         );
     }
+    @PostMapping("/api/clients/new/many")
+    public ResponseEntity<HttpResponse> registerClients(@RequestBody List<ClientDto> clientDtos)
+    {
+        String msg = clientService.registerClients(clientDtos);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
 }

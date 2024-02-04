@@ -34,6 +34,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    public String registerClients(List<ClientDto> clientDtos) {
+        List<Client> clients = clientDtos.stream()
+                .map(this::mapDtoToEntity)
+                .toList();
+        clientRepo.saveAll(clients);
+        return "Clients List registration successful";
+    }
+
+    @Override
     public List<ClientDto> retrieveByProjId(Long id) {
         List<Client> clientEntities = clientRepo.findByProjId(id);
         List<ClientDto> clientDtos = clientEntities.stream()
@@ -51,6 +60,16 @@ public class ClientServiceImpl implements ClientService {
         clientDto.setPhone(client.getPhone());
         clientDto.setProjId(client.getProject().getId());
         return (clientDto);
+    }
+    public Client mapDtoToEntity(ClientDto clientDto)
+    {
+        Client clientEntity = new Client();
+        clientEntity.setName(clientDto.getName());
+        clientEntity.setEmail(clientDto.getEmail());
+        clientEntity.setPhone(clientDto.getPhone());
+        clientEntity.setRegistrationDate(clientDto.getRegistrationDate());
+        clientEntity.setProject(projectRepo.findById(clientDto.getProjId()).get());
+        return (clientEntity);
     }
 
     @Override

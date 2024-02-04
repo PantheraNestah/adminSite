@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface ClientService {
     String registerClient(ClientDto clientDto);
+    String registerClients(List<ClientDto> clientDtos);
     List<ClientDto> retrieveByProjId(Long id);
     ClientDto mapEntityToDto(Client client);
+    Client mapDtoToEntity(ClientDto clientDto);
     void bulkClientMail(MessageDto messageDto);
 }
