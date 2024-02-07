@@ -81,8 +81,22 @@
                                     work_history
                                 </span> Recent Activities
                             </a>
-                            <div class="collapse show d-flex justify-content-center align-items-center" id="activities-log">
-                                <span>Activities appear here...</span>
+                            <div class="collapse show" id="activities-log">
+                                <article class="default d-flex align-items-center justify-content-center">
+                                    <p>Activities appear here...</p>
+                                </article>
+                                <article class="notification d-flex justify-content-between align-items-center">
+                                    <p>Client Registration successful</p>
+                                    <time>10:00</time>
+                                </article>
+                                <article class="notification d-flex justify-content-between align-items-center">
+                                    <p>Project Registration successful</p>
+                                    <time>11:00</time>
+                                </article>
+                                <article class="notification d-flex justify-content-between align-items-center">
+                                    <p>Successfully edited project</p>
+                                    <time>09:00</time>
+                                </article>
                             </div>
                         </li>
                         <li class="nav-item support">
@@ -103,33 +117,59 @@
                     </div>
                     <div class="dropdown col-2 d-flex justify-content-end">
                         <div class="d-flex col-7 justify-content-between">
+                            <a href="" class="me-2 f-6">
+                                <span><i class="bi bi-box-arrow-right btsp-icons f-5"></i></span>
+                            </a>
                             <a class="" role="button" href="#notificationsOffcanvas" data-bs-toggle="offcanvas" aria-controls="notificationsOffcanvas">
                                 <i class="bi bi-bell-fill btsp-icons"></i>
                             </a>
-                            <a id="dropmenuAcc" class="div-staff-prof show" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="div-staff-prof" href="#settingsOffcanvas" data-bs-toggle="offcanvas" aria-controls="settingsOffcanvas">
                                 <img src="/imgs/AI-Profile-Picture.jpg" alt="AI generated image" style="width: 30px;height: 30px;border-radius: 50%;">
                             </a>
-                            <div id="staff-accessories" class="dropdown-menu dropdown-menu-end staff-accessories" aria-labelled-by="dropmenuAcc" data-bs-popper="static">
-                                <span class="header-wrapper d-flex align-items-center justify-content-center">
-                                    <h2 class="text-center">Profile & account</h2>
-                                </span>
-                                <ul class="d-flex flex-column justify-content-between mx-auto">
-                                    <li>
-                                        <span><i class="bi bi-gear-fill btsp-icons"></i></span>
-                                        <span>Settings</span>
-                                    </li>
-                                    <li>
-                                        <span><i class="bi bi-box-arrow-right btsp-icons"></i></span>
-                                        <span>Logout</span>
-                                    </li>
-                                </ul>
-                            </div>
                             <div class="offcanvas offcanvas-end" id="notificationsOffcanvas" aria-labelledby="offcanvasLabel">
                                 <div class="offcanvas-header">
                                     <h2 class="offcanvas-title" id="offcanvasLabel">Notifications</h2>
                                     <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
                                 </div>
                                 <div class="offcanvas-body"></div>
+                            </div>
+                            <div class="offcanvas offcanvas-end" id="settingsOffcanvas" aria-labelledby="settingsLabel">
+                                <div class="offcanvas-header">
+                                    <h2 class="offcanvas-title" id="settingsLabel" style="font-size: 22px;">Account Settings</h2>
+                                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                                </div>
+                                <hr>
+                                <div class="offcanvas-body">
+                                    <article>
+                                        <div class="div-current-profile d-flex align-items-center justify-content-center">
+                                            <img src="/imgs/AI-Profile-Picture.jpg" alt="">
+                                        </div>
+                                    </article>
+                                    <article class="article-staff-details">
+                                        <span style="position: absolute; top: 1.2rem;right: 1.7rem;">
+                                            <i class="bi bi-pencil-square" style="font-size: 28px;font-weight: 800;"></i>
+                                        </span>
+                                        <div class="staff-details">
+                                            <form action="" class="d-flex flex-column justify-content-between col-11">
+                                                <span class="d-flex justify-content-between">
+                                                    <label for="">Email</label>
+                                                    <input class="txt-input" type="email" placeholder="name@example.com">
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <label for="">Phone</label>
+                                                    <input class="txt-input" type="text" placeholder="+254798765432">
+                                                </span>
+                                                <span class="d-flex justify-content-between" style="position: relative;">
+                                                    <label for="">Profile</label>
+                                                    <input type="file" class="ms-4">
+                                                </span>
+                                                <div>
+                                                    <input type="submit" value="Save" class="btn btn-cprimary" style="width: 60px;">
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </article>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -141,7 +181,7 @@
         <section style="margin-bottom: 3rem;padding-left: 3rem;">
             <div aria-label="breadcrumb" style="margin-top: 2rem;">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="@{/meladen/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="{/meladen/home}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Staff</li>
                 </ol>
             </div>
@@ -197,10 +237,16 @@
                 <div class="ctable-title col-5 d-flex flex-column align-items-left">
                     <span>Staff Details</span>
                 </div>
-                <div class="staff-plus p-1 d-flex justify-content-between align-items-center">
-                    <a href="#" class="btn me-2 p-1"><i class="bi bi-plus-lg me-2"></i> New</a>
-                    <a id="rows-action" href="#" class="btn ms-2 p-1">Action</a>
+                <div class="div-table-tabs col-11 d-flex align-items-center justify-content-end mx-auto">
+                    <div class="table-tab btn btn-cprimary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#staffModal">
+                        <span><i class="bi bi-plus-circle-fill btsp-icons"></i></span>
+                        <span class="ms-1" style="font-size: 14.5px;">Staff</span>
+                    </div>
                 </div>
+                <!-- <div class="staff-plus p-1 d-flex justify-content-between align-items-center">
+                    <a class="btn me-2 p-1" data-bs-toggle="modal" data-bs-target="#staffModal"><i class="bi bi-plus-lg me-2"></i> New</a>
+                    <a id="rows-action" href="#" class="btn ms-2 p-1">Action</a>
+                </div> -->
                 <div class="col-11 mx-auto">
                     <table id="staff-table" class="hover stripe">
                         <thead>
@@ -219,6 +265,52 @@
                 </div>
             </div>
         </section>
+        <section id="staffModal" class="modal fade staffModal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title myModal-title">staff Registration</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal-form">
+                            <form action="" id="staffForm" class="d-flex flex-column justify-content-between col-11">
+                                <span class="input-field d-flex justify-content-between">
+                                    <label for="staffName">Name</label>
+                                    <input class="text-center" type="text" name="name" id="staffName" placeholder="e.g John Doe">
+                                </span>
+                                <span class="input-field d-flex justify-content-between">
+                                    <label for="staffMail">Email</label>
+                                    <input class="text-center" type="text" name="email" id="staffMail" placeholder="staffname@example.com">
+                                </span>
+                                <span class="input-field d-flex justify-content-between">
+                                    <label for="staffPhone">Phone</label>
+                                    <input class="text-center" type="text" name="phone" id="staffPhone" placeholder="+254798765432">
+                                </span>
+                                <span class="input-field d-flex justify-content-between">
+                                    <label for="staffRole">Role</label>
+                                    <input class="text-center" type="text" name="role" id="staffRole" placeholder="e.g Staff">
+                                </span>
+                                <span class="operation-response mx-auto">
+                                    <label class="success mx-auto d-none align-items-center">
+                                        <span>Successfully added</span>
+                                        <i class="bi bi-check-circle-fill"></i>
+                                    </label>
+                                    <label class="failure mx-auto d-none align-items-center">
+                                        <span>Operation Failed!</span>
+                                        <i class="bi bi-x-circle-fill"></i>
+                                    </label>
+                                </span>
+                                <span class="modal-footer">
+                                    <input type="submit" value="Save" class="btn btn-primary" style="width: 60px;height: 38px;">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </span>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
         <section id="clientModal" class="modal fade clientModal">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
@@ -228,11 +320,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="modal-form">
-                            <form action="" class="d-flex flex-column justify-content-between">
+                            <form action="" id="clientForm" class="d-flex flex-column justify-content-between col-11">
                                 <span class="input-field d-flex justify-content-between">
                                     <label for="productId">Product Id</label>
                                     <input class="text-center" type="text" id="productId" placeholder="search by id">
-                                    <span class="confirm-product">
+                                    <span class="confirm-product d-none">
                                         <i class="bi bi-check-circle-fill"></i>
                                         <span>Product found</span>
                                     </span>
@@ -250,21 +342,21 @@
                                     <input class="text-center" type="text" name="phone" id="clientPhone" placeholder="+254798765432">
                                 </span>
                                 <span class="operation-response mx-auto">
-                                    <label class="success mx-auto d-flex align-items-center">
+                                    <label class="success mx-auto d-none align-items-center">
                                         <span>Successfully added</span>
                                         <i class="bi bi-check-circle-fill"></i>
                                     </label>
                                     <label class="failure mx-auto d-none align-items-center">
-                                        <span>Failed!</span>
+                                        <span>Operation Failed!</span>
                                         <i class="bi bi-x-circle-fill"></i>
                                     </label>
                                 </span>
+                                <span class="modal-footer">
+                                    <input type="submit" value="Save" class="btn btn-primary" style="width: 60px;height: 38px;">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </span>
                             </form>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
@@ -278,7 +370,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="modal-form">
-                            <form action="" class="d-flex flex-column justify-content-between">
+                            <form action="" id="prodForm" class="d-flex flex-column justify-content-between">
                                 <span class="input-field d-flex justify-content-between">
                                     <label for="prodName">Name</label>
                                     <input class="text-center" type="text" name="prodName" id="prodName" placeholder="e.g The real homes">
@@ -287,22 +379,26 @@
                                     <label for="prodValue">Value</label>
                                     <input class="text-center" type="text" name="prodValue" id="prodValue" placeholder="e.g 19.2M">
                                 </span>
+                                <span class="input-field d-flex justify-content-between">
+                                    <label for="">Photo</label>
+                                    <input type="file" class="ms-2">
+                                </span>
                                 <span class="operation-response mx-auto">
-                                    <label class="success mx-auto d-flex align-items-center">
+                                    <label class="success mx-auto d-none align-items-center">
                                         <span>Successfully added</span>
                                         <i class="bi bi-check-circle-fill"></i>
                                     </label>
                                     <label class="failure mx-auto d-none align-items-center">
-                                        <span>Failed!</span>
+                                        <span>Operation Failed!</span>
                                         <i class="bi bi-x-circle-fill"></i>
                                     </label>
                                 </span>
+                                <span class="modal-footer">
+                                    <input type="submit" value="Save" class="btn btn-primary" style="width: 60px;height: 38px;">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width: 60px;height: 38px;">Close</button>
+                                </span>
                             </form>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary">Save</button>
                     </div>
                 </div>
             </div>
@@ -316,6 +412,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://cdn.datatables.net/v/dt/dt-1.10.16/sl-1.2.5/datatables.min.js"></script>
     <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="/js/main.js"></script>
     <script src="/js/staff.js"></script>
 </body>
 </html>

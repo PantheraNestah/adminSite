@@ -118,6 +118,9 @@ fetchAllProjs().then(
         )
         clientsArea.selectOpts()
         clientsArea.updateTableOnSelect(clientsDataTable)
+        projectsArea.registerProject()
+        clientsArea.registerClient()
+        clientsArea.emailClients()
     }
 )
 
@@ -138,15 +141,18 @@ var projectsArea = {
         }
     },
     registerProject: function() {
-        document.getElementById("prodModal").addEventListener("submit", (form) => {
+        document.getElementById("prodForm").addEventListener("submit", (form) => {
             form.preventDefault()
             const formData = new FormData(form.target)
             const jsonData = {}
             formData.forEach((value, key) => {
                 jsonData[key] = value
             })
+            const today = new Date()
+            var regDate = today.toISOString().slice(0, 10)
+            jsonData["creationDate"] = regDate
             fetch(
-                `${apiEndPoint}meladen/projects/new`,
+                `${apiEndPoint}projects/new`,
                 {
                     method: "POST",
                     headers: {
@@ -182,11 +188,6 @@ var clientsArea = {
     clientObjects: [],
     selectElem: document.getElementById("projectsList"),
     selectOpts: function() {
-        /* projectsArea.projectsNamesArray.forEach((name) => {
-            var opt = document.createElement("option")
-            opt.innerText = name
-            this.selectElem.appendChild(opt)
-        }) */
         for (let i = 0;i < projectsArea.projectsNamesArray.length;i++){
             var opt = document.createElement("option")
             opt.innerText = projectsArea.projectsNamesArray[i]
@@ -195,17 +196,141 @@ var clientsArea = {
         }
     },
     updateTableOnSelect: function(table) {
-        /* var children = Array.from(this.selectElem.children)
-        children.forEach((child) => {
-            console.log(child)
-            child.addEventListener("click", () => {
-                table.clear().rows.add(projDtos[child.getAttribute("id")].clientDtos).draw()
-            })
-        }) */
         this.selectElem.addEventListener("change", (event) => {
             var idx = event.target.value
             console.log(`Array of index ${idx} to be used`)
             table.clear().rows.add(projDtos[idx].clientDtos).draw()
+        })
+    },
+    registerClient: function() {
+        document.getElementById("clientForm").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            /* var prodIdx = this.selectElem.value
+            jsonData["projId"] = prodIdx */
+            const today = new Date()
+            var regDate = today.toISOString().slice(0, 10)
+            jsonData["registrationDate"] = regDate
+            fetch(
+                `${apiEndPoint}clients/new`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.querySelector(".confirm-product").classList.remove("d-none")
+                    document.getElementById("clientModal").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("clientModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.querySelector(".confirm-product").classList.add("d-none")
+                    }, 3800)
+                    document.getElementById("clientModal").querySelector("form").reset()
+                }
+                else
+                {
+                    document.getElementById("clientModal").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("clientModal").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+        })
+    },
+    smsClients: function() {
+        document.getElementById("smsModal").querySelector("form").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            const today = new Date()
+            var regDate = today.toISOString().slice(0, 10)
+
+            fetch(
+                `${apiEndPoint}clients/sms`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.getElementById("smsModal").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("smsModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.getElementById("smsModal").querySelector("form").reset()
+                    }, 3800)
+                }
+                else
+                {
+                    document.getElementById("smsModal").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("smsModal").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+            //update activities log
+        })
+    },
+    emailClients: function() {
+        document.getElementById("activities-log")
+        document.getElementById("emailModal").querySelector("form").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            jsonData["subject"] = "Project updates"
+            const today = new Date()
+            var regDate = today.toISOString().slice(0, 10)
+
+            fetch(
+                `${apiEndPoint}clients/email`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.getElementById("emailModal").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("emailModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.getElementById("emailModal").querySelector("form").reset()
+                    }, 3800)
+                }
+                else
+                {
+                    document.getElementById("emailModal").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("emailModal").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+            //update activities log
         })
     }
 }

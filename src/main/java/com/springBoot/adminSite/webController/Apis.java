@@ -2,6 +2,7 @@ package com.springBoot.adminSite.webController;
 
 import com.springBoot.adminSite.Dto.ClientDto;
 import com.springBoot.adminSite.Dto.HttpResponse;
+import com.springBoot.adminSite.Dto.MessageDto;
 import com.springBoot.adminSite.Dto.ProjectDto;
 import com.springBoot.adminSite.Service.ClientService;
 import com.springBoot.adminSite.Service.ProjectService;
@@ -74,6 +75,38 @@ public class Apis {
                                 .requestMethod("POST")
                                 .status(HttpStatus.CREATED)
                                 .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
+    @PostMapping("/api/clients/sms")
+    public ResponseEntity<HttpResponse> smsClientsPerProj(@RequestBody MessageDto messageDto)
+    {
+        String msg = "Client SMS";
+        System.out.println("\n\n\t" + messageDto + "\n\n");
+
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
+    @PostMapping("/api/clients/email")
+    public ResponseEntity<HttpResponse> emailClientsPerProj(@RequestBody MessageDto messageDto)
+    {
+        String msg = clientService.bulkClientMail(messageDto);
+        System.out.println("\n\n\t" + messageDto + "\n\n");
+
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
                         .build()
                 )
         );

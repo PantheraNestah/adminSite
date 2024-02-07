@@ -73,9 +73,15 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public void bulkClientMail(MessageDto messageDto) {
+    public String bulkClientMail(MessageDto messageDto) {
         List<Client> clientList = clientRepo.findByProjId(messageDto.getProdId());
         emailService.bulkClientMail(clientList, messageDto.getSubject(), messageDto.getMsg());
+        return ("Bulk client Mail successfully sent");
     }
-
+    @Override
+    public String bulkClientSms(MessageDto messageDto) {
+        List<Client> clientList = clientRepo.findByProjId(messageDto.getProdId());
+        //emailService.bulkClientMail(clientList, messageDto.getSubject(), messageDto.getMsg());
+        return ("Bulk client Mail successfully sent");
+    }
 }

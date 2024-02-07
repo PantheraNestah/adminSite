@@ -445,7 +445,21 @@ main .current-staff .prof-body .info-container a.btn {
 }
 .nav-div-drop .div-recents div {
   height: 15rem;
+  padding-top: 15px;
+  padding-left: 15px;
+  padding-right: 20px;
   background-color: #dee2e6;
+  overflow-y: scroll;
+}
+.nav-div-drop .div-recents div .notification, .nav-div-drop .div-recents div .default {
+  border-bottom: 1px solid #f8f9fa;
+}
+.nav-div-drop .div-recents div .notification p, .nav-div-drop .div-recents div .default p {
+  font-size: 12px;
+}
+.nav-div-drop .div-recents div .notification time, .nav-div-drop .div-recents div .default time {
+  font-size: 10.8px;
+  color: #13795b;
 }
 .nav-div-drop .support div {
   height: 15rem;
@@ -564,10 +578,10 @@ main .current-staff .prof-body .info-container a.btn {
   font-size: 20px;
 }
 
-.clientModal .modal-content, .prodModal .modal-content, .messageModal .modal-content {
+.clientModal .modal-content, .prodModal .modal-content, .messageModal .modal-content, .staffModal .modal-content {
   background-color: #ffe5d0;
 }
-.clientModal .myModal-title, .prodModal .myModal-title, .messageModal .myModal-title {
+.clientModal .myModal-title, .prodModal .myModal-title, .messageModal .myModal-title, .staffModal .myModal-title {
   font-size: 20px;
 }
 
@@ -624,7 +638,7 @@ main .current-staff .prof-body .info-container a.btn {
 }
 
 .clientModal .modal-form {
-  height: 340px;
+  height: 330px;
 }
 .clientModal .modal-form form {
   height: 250px;
@@ -639,6 +653,10 @@ main .current-staff .prof-body .info-container a.btn {
 
 .messageModal .modal-form {
   height: 320px;
+}
+
+.staffModal .modal-form {
+  height: 330px;
 }
 
 footer {

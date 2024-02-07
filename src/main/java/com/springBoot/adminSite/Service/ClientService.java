@@ -12,5 +12,7 @@ public interface ClientService {
     List<ClientDto> retrieveByProjId(Long id);
     ClientDto mapEntityToDto(Client client);
     Client mapDtoToEntity(ClientDto clientDto);
-    void bulkClientMail(MessageDto messageDto);
+    String bulkClientMail(MessageDto messageDto);
+
+    String bulkClientSms(MessageDto messageDto);
 }
