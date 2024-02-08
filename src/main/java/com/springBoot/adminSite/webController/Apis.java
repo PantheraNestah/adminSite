@@ -82,8 +82,8 @@ public class Apis {
     @PostMapping("/api/clients/sms")
     public ResponseEntity<HttpResponse> smsClientsPerProj(@RequestBody MessageDto messageDto)
     {
-        String msg = "Client SMS";
         System.out.println("\n\n\t" + messageDto + "\n\n");
+        String msg = clientService.bulkClientSms(messageDto);
 
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()
@@ -98,8 +98,8 @@ public class Apis {
     @PostMapping("/api/clients/email")
     public ResponseEntity<HttpResponse> emailClientsPerProj(@RequestBody MessageDto messageDto)
     {
-        String msg = clientService.bulkClientMail(messageDto);
         System.out.println("\n\n\t" + messageDto + "\n\n");
+        String msg = clientService.bulkClientMail(messageDto);
 
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()

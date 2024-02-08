@@ -7,6 +7,7 @@ import com.springBoot.adminSite.Repository.ClientRepo;
 import com.springBoot.adminSite.Repository.ProjectRepo;
 import com.springBoot.adminSite.Service.ClientService;
 import com.springBoot.adminSite.Service.EmailService;
+import com.springBoot.adminSite.Service.smsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,13 +23,15 @@ public class ClientServiceImpl implements ClientService {
     private ClientDto clientDtoMain;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private smsService smsService;
     @Override
     public String registerClient(ClientDto clientDto) {
         Client clientEntity = new Client();
         clientEntity.setName(clientDto.getName());
         clientEntity.setEmail(clientDto.getEmail());
         clientEntity.setPhone(clientDto.getPhone());
-        clientEntity.setProject(projectRepo.findById(clientDto.getProjId()).get());
+        clientEntity.setProject(projectRepo.findById(clientDto.getProdId()).get());
         clientRepo.save(clientEntity);
         return ("Client registration Successful");
     }
@@ -58,7 +61,7 @@ public class ClientServiceImpl implements ClientService {
         clientDto.setName(client.getName());
         clientDto.setEmail(client.getEmail());
         clientDto.setPhone(client.getPhone());
-        clientDto.setProjId(client.getProject().getId());
+        clientDto.setProdId(client.getProject().getId());
         return (clientDto);
     }
     public Client mapDtoToEntity(ClientDto clientDto)
@@ -68,20 +71,23 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setEmail(clientDto.getEmail());
         clientEntity.setPhone(clientDto.getPhone());
         clientEntity.setRegistrationDate(clientDto.getRegistrationDate());
-        clientEntity.setProject(projectRepo.findById(clientDto.getProjId()).get());
+        clientEntity.setProject(projectRepo.findById(clientDto.getProdId()).get());
         return (clientEntity);
     }
 
     @Override
     public String bulkClientMail(MessageDto messageDto) {
-        List<Client> clientList = clientRepo.findByProjId(messageDto.getProdId());
-        emailService.bulkClientMail(clientList, messageDto.getSubject(), messageDto.getMsg());
+        //List<Client> clientList = clientRepo.findByProjId(messageDto.getProdId());
+        emailService.bulkClientMail(messageDto.getClients(), messageDto.getSubject(), messageDto.getMsg());
         return ("Bulk client Mail successfully sent");
     }
     @Override
     public String bulkClientSms(MessageDto messageDto) {
-        List<Client> clientList = clientRepo.findByProjId(messageDto.getProdId());
-        //emailService.bulkClientMail(clientList, messageDto.getSubject(), messageDto.getMsg());
+        List<String> clients = messageDto.getClients().stream()
+                .map((client) -> {return client.getPhone();})
+                .toList();
+        String[] contactArray = clients.toArray(new String[0]);
+        smsService.sendClientSms(messageDto.getMsg(), contactArray);
         return ("Bulk client Mail successfully sent");
     }
 }

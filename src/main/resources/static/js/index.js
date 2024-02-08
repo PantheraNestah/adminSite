@@ -121,6 +121,7 @@ fetchAllProjs().then(
         projectsArea.registerProject()
         clientsArea.registerClient()
         clientsArea.emailClients()
+        clientsArea.smsClients()
     }
 )
 
@@ -210,8 +211,6 @@ var clientsArea = {
             formData.forEach((value, key) => {
                 jsonData[key] = value
             })
-            /* var prodIdx = this.selectElem.value
-            jsonData["projId"] = prodIdx */
             const today = new Date()
             var regDate = today.toISOString().slice(0, 10)
             jsonData["registrationDate"] = regDate
@@ -255,9 +254,11 @@ var clientsArea = {
             formData.forEach((value, key) => {
                 jsonData[key] = value
             })
+            jsonData["subject"] = "Project updates"
+            var selectedProd = projDtos.find(obj => obj.id == jsonData.prodId)
+            jsonData["clients"] = selectedProd.clientDtos
             const today = new Date()
             var regDate = today.toISOString().slice(0, 10)
-
             fetch(
                 `${apiEndPoint}clients/sms`,
                 {
@@ -299,6 +300,8 @@ var clientsArea = {
                 jsonData[key] = value
             })
             jsonData["subject"] = "Project updates"
+            var selectedProd = projDtos.find(obj => obj.id == jsonData.prodId)
+            jsonData["clients"] = selectedProd.clientDtos
             const today = new Date()
             var regDate = today.toISOString().slice(0, 10)
 
@@ -319,6 +322,7 @@ var clientsArea = {
                     document.getElementById("emailModal").querySelector(".success").classList.replace("d-none", "d-flex")
                     setTimeout(() => {
                         document.getElementById("emailModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.querySelector(".confirm-product").classList.add("d-none")
                         document.getElementById("emailModal").querySelector("form").reset()
                     }, 3800)
                 }

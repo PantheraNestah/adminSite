@@ -1,5 +1,6 @@
 package com.springBoot.adminSite.Service.ServiceImpl;
 
+import com.springBoot.adminSite.Dto.ClientDto;
 import com.springBoot.adminSite.Dto.StaffDto;
 import com.springBoot.adminSite.Entities.Client;
 import com.springBoot.adminSite.Service.EmailService;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -52,13 +54,14 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public List<String> bulkClientMail(List<Client> clientList, String subject, String message) {
+    public List<String> bulkClientMail(List<ClientDto> clientList, String subject, String message) {
         List<String> responseList = clientList.stream()
-                .map(clientEntity -> sendClientMail(clientEntity,subject, message))
+                .map(clientDto -> sendClientMail(clientDto,subject, message))
                 .toList();
         return (responseList);
     }
-    public String sendClientMail(Client client, String subject, String message)
+    @Async
+    public String sendClientMail(ClientDto client, String subject, String message)
     {
         String str = "";
         try{

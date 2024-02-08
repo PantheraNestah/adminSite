@@ -13,7 +13,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class ClientDto {
     private Long id;
-    private Long projId;
+    private Long prodId;
     private String name;
     private String email;
     private String phone;
