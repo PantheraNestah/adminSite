@@ -5,6 +5,7 @@ import com.springBoot.adminSite.Dto.StaffDto;
 
 public interface StaffService {
     String registerStaff(StaffDto staff);
+    String updateStaff(StaffDto staffDto);
     String staffSetPasswordMail(String eMail);
     String saveStaffPassword(IdnPassword idnPassword);
     StaffDto findUserByEmail(String email);

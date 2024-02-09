@@ -1,11 +1,9 @@
 package com.springBoot.adminSite.webController;
 
-import com.springBoot.adminSite.Dto.ClientDto;
-import com.springBoot.adminSite.Dto.HttpResponse;
-import com.springBoot.adminSite.Dto.MessageDto;
-import com.springBoot.adminSite.Dto.ProjectDto;
+import com.springBoot.adminSite.Dto.*;
 import com.springBoot.adminSite.Service.ClientService;
 import com.springBoot.adminSite.Service.ProjectService;
+import com.springBoot.adminSite.Service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +21,8 @@ public class Apis {
     private ProjectService projectService;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private StaffService staffService;
     @GetMapping("/api/projects/all")
     public ResponseEntity<HttpResponse> allProjects()
     {
@@ -115,6 +115,19 @@ public class Apis {
     public ResponseEntity<HttpResponse> registerClients(@RequestBody List<ClientDto> clientDtos)
     {
         String msg = clientService.registerClients(clientDtos);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
+    @PostMapping("/api/staffs/edit")
+    public ResponseEntity<HttpResponse> editStaff(@RequestBody StaffDto staffDto) {
+        String msg = staffService.updateStaff(staffDto);
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()
                         .message(msg)

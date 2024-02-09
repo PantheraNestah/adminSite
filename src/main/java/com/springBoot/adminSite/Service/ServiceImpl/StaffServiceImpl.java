@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-public class StaffServiceImpl implements StaffService {
+public class    StaffServiceImpl implements StaffService {
     @Autowired
     private StaffDto staffDto;
     @Autowired
@@ -33,7 +33,19 @@ public class StaffServiceImpl implements StaffService {
         staffSetPasswordMail(staff.getEmail());
         return ("\n\n\t\tStaff saved successfully");
     }
-
+    @Override
+    public String updateStaff(StaffDto staffDto) {
+        Staff staff = new Staff();
+        staff.setName(staffDto.getName());
+        staff.setEmail(staffDto.getEmail());
+        staff.setPhone(staffDto.getPhone());
+        staff.setRole(staffDto.getRole());
+        staff.setLnHandle(staffDto.getLnHandle());
+        staff.setXHandle(staffDto.getXHandle());
+        staff.setProfileImage(staffDto.getPhoto());
+        staffRepo.save(staff);
+        return ("Staff details successfully updated");
+    }
     @Override
     public String staffSetPasswordMail(String eMail) {
         Staff staff = staffRepo.findByEmail(eMail);

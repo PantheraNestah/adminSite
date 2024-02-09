@@ -25,6 +25,8 @@ public class Staff {
     private String password;
     @Column(name = "role", length = 6)
     private String role;
+    //@Column(name = "department", length = 100)
+    //private String department;
     @Lob
     @Column(name = "photo", columnDefinition = "BLOB")
     private byte[] profileImage;
