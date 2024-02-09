@@ -146,25 +146,33 @@
                                         </div>
                                     </article>
                                     <article class="article-staff-details">
-                                        <span style="position: absolute; top: 1.2rem;right: 1.7rem;">
-                                            <i class="bi bi-pencil-square" style="font-size: 28px;font-weight: 800;"></i>
+                                        <span id="toggle-edit" style="position: absolute; top: 1.2rem;right: 1.7rem;cursor: pointer;">
+                                            <i class="bi bi-pencil-square" style="font-size: 22px;font-weight: 800;"></i>
                                         </span>
                                         <div class="staff-details">
-                                            <form action="" class="d-flex flex-column justify-content-between col-11">
+                                            <form id="edit-staffForm" action="" class="d-flex flex-column justify-content-between col-11">
                                                 <span class="d-flex justify-content-between">
-                                                    <label for="">Email</label>
-                                                    <input class="txt-input" type="email" placeholder="name@example.com">
+                                                    <label for="staffEmail">Email</label>
+                                                    <input class="txt-input" type="email" id="staffEmail" name="email" disabled placeholder="name@example.com">
                                                 </span>
                                                 <span class="d-flex justify-content-between">
-                                                    <label for="">Phone</label>
-                                                    <input class="txt-input" type="text" placeholder="+254798765432">
+                                                    <label for="staffPhone">Phone</label>
+                                                    <input class="txt-input" type="text" id="staffPhone" name="phone" disabled placeholder="+254798765432">
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <label for="lnHandle">LinkedIn</label>
+                                                    <input class="txt-input" type="text" id="lnHandle" name="lnHandle" disabled placeholder="@LinkedIn">
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <label for="xHandle">X Handle</label>
+                                                    <input class="txt-input" type="text" id="xHandle" name="xHandle" disabled placeholder="@xHandle">
                                                 </span>
                                                 <span class="d-flex justify-content-between" style="position: relative;">
                                                     <label for="">Profile</label>
-                                                    <input type="file" class="ms-4">
+                                                    <input type="file" disabled class="ms-4">
                                                 </span>
                                                 <div>
-                                                    <input type="submit" value="Save" class="btn btn-cprimary" style="width: 60px;">
+                                                    <input type="submit" value="Save" class="submit-edit btn btn-cprimary" style="width: 60px;">
                                                 </div>
                                             </form>
                                         </div>
@@ -181,7 +189,7 @@
         <section style="margin-bottom: 3rem;padding-left: 3rem;">
             <div aria-label="breadcrumb" style="margin-top: 2rem;">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a th:href="{/meladen/home}">Home</a></li>
+                    <li class="breadcrumb-item"><a th:href="@{/meladen/home}">Home</a></li>
                     <li class="breadcrumb-item active" aria-current="page">Staff</li>
                 </ol>
             </div>
@@ -196,8 +204,8 @@
                 <div class="prof-body">
                     <div class="row info-container">
                         <div class="col-lg-7 d-flex flex-column pt-3" style="padding-left: 2rem;">
-                            <h2 style="font-size: 24px;margin-bottom: 3px;">McDornald Williams</h2>
-                            <span style="font-size: 18px;">Senior Human Resource</span>
+                            <h2 style="font-size: 24px;margin-bottom: 3px;" class="detail-name">McDornald Williams</h2>
+                            <span style="font-size: 18px;">Technical Support</span>
                             <span style="font-size: 18px;"><i class="bi bi-geo-alt"></i> Nairobi,Lavington</span>
                             <article class="quick-contact col-5 d-flex justify-content-between">
                                 <div>
@@ -212,19 +220,19 @@
                             <article>
                                 <a href="" class="d-flex align-items-center"> <!--linkedin handle-->
                                     <span><i class="bi bi-linkedin"></i></span>
-                                    <span class="ms-2">McDornald Williams</span>
+                                    <span class="detail-ln ms-2">McDornald Williams</span>
                                 </a>
                             </article>
                             <article>
                                 <a href="" class="d-flex align-items-center"> <!--twitter handle-->
                                     <span style="color: black;"><i class="bi bi-twitter-x"></i></i></span>
-                                    <span class="ms-2">@McDornald254</span>
+                                    <span class="detail-x ms-2">@McDornald254</span>
                                 </a>
                             </article>
                             <article>
                                 <a href="" class="d-flex align-items-center"> <!--gmail handle-->
                                     <span><i class="bi bi-envelope-at-fill"></i></span>
-                                    <span class="ms-2">dornaldwilliams@gmail.com</span>
+                                    <span class="detail-mail ms-2">dornaldwilliams@gmail.com</span>
                                 </a>
                             </article>
                         </div>
@@ -323,7 +331,7 @@
                             <form action="" id="clientForm" class="d-flex flex-column justify-content-between col-11">
                                 <span class="input-field d-flex justify-content-between">
                                     <label for="productId">Product Id</label>
-                                    <input class="text-center" type="text" id="productId" placeholder="search by id">
+                                    <input class="text-center" type="text" name="prodId" id="productId" placeholder="search by id">
                                     <span class="confirm-product d-none">
                                         <i class="bi bi-check-circle-fill"></i>
                                         <span>Product found</span>

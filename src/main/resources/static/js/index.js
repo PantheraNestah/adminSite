@@ -3,6 +3,7 @@ const apiEndPoint = "http://localhost:8080/api/"
 var projDtos = []
 var clientDtos = []
 var projectsNames = []
+var loggedInStaff
 var clientsArray = [
     {
         "id":"1",
@@ -66,6 +67,34 @@ var clientsArray = [
     }
 ]
 
+var fetchLoggedInStaff = async() => {
+    var cstaffPromise = await fetch(
+        "http://localhost:8080/meladen/staffs/current",
+        {
+            method: "GET"
+        }
+    )
+    const respBody = await cstaffPromise.json()
+    return (respBody)
+}
+fetchLoggedInStaff().then(
+    (response) => {
+        loggedInStaff = response.data.staffDto
+        document.getElementById("settingsOffcanvas").querySelector("#staffEmail").value = loggedInStaff.email
+        document.getElementById("settingsOffcanvas").querySelector("#staffPhone").value = loggedInStaff.phone
+        document.getElementById("settingsOffcanvas").querySelector("#lnHandle").value = loggedInStaff.lnHandle
+        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = loggedInStaff.xHandle
+
+        document.getElementById("toggle-edit").addEventListener("click", () => {
+            document.getElementById("settingsOffcanvas").querySelector(".submit-edit").disabled = false
+            document.getElementById("settingsOffcanvas").querySelector("#staffEmail").disabled = false
+            document.getElementById("settingsOffcanvas").querySelector("#staffPhone").disabled = false
+            document.getElementById("settingsOffcanvas").querySelector("#lnHandle").disabled = false
+            document.getElementById("settingsOffcanvas").querySelector("#xHandle").disabled = false
+        })
+
+    }
+)
 var fetchAllProjs = async() => {
     var projPromise = await fetch(
         `${apiEndPoint}projects/all`,
@@ -76,6 +105,7 @@ var fetchAllProjs = async() => {
     const respBody = await projPromise.json()
     return (respBody)
 }
+
 fetchAllProjs().then(
     (response) => {
         projDtos = response.data.projects
@@ -124,6 +154,53 @@ fetchAllProjs().then(
         clientsArea.smsClients()
     }
 )
+
+var staffOps = {
+    editStaff: function() {
+        document.getElementById("edit-staffForm").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            jsonData["id"] = loggedInStaff.id
+            /* const today = new Date()
+            var regDate = today.toISOString().slice(0, 10)
+            jsonData["registrationDate"] = regDate */
+            fetch(
+                `${apiEndPoint}staffs/edit`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.querySelector(".confirm-product").classList.remove("d-none")
+                    document.getElementById("staffModal").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("staffModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.querySelector(".confirm-product").classList.add("d-none")
+                    }, 3800)
+                    document.getElementById("staffModal").querySelector("form").reset()
+                }
+                else
+                {
+                    document.getElementById("staffModal").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("staffModal").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+        })
+    }
+}
 
 var projectsArea = {
     projDtos: projDtos,

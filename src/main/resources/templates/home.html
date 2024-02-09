@@ -145,25 +145,33 @@
                                         </div>
                                     </article>
                                     <article class="article-staff-details">
-                                        <span style="position: absolute; top: 1.2rem;right: 1.7rem;">
-                                            <i class="bi bi-pencil-square" style="font-size: 28px;font-weight: 800;"></i>
+                                        <span id="toggle-edit" style="position: absolute; top: 1.2rem;right: 1.7rem;cursor: pointer;">
+                                            <i class="bi bi-pencil-square" style="font-size: 22px;font-weight: 800;"></i>
                                         </span>
                                         <div class="staff-details">
-                                            <form action="" class="d-flex flex-column justify-content-between col-11">
+                                            <form id="edit-staffForm" action="" class="d-flex flex-column justify-content-between col-11">
                                                 <span class="d-flex justify-content-between">
-                                                    <label for="">Email</label>
-                                                    <input class="txt-input" type="email" placeholder="name@example.com">
+                                                    <label for="staffEmail">Email</label>
+                                                    <input class="txt-input" type="email" name="email" id="staffEmail" disabled placeholder="name@example.com">
                                                 </span>
                                                 <span class="d-flex justify-content-between">
-                                                    <label for="">Phone</label>
-                                                    <input class="txt-input" type="text" placeholder="+254798765432">
+                                                    <label for="staffPhone">Phone</label>
+                                                    <input class="txt-input" type="text" name="phone" id="staffPhone" disabled placeholder="+254798765432">
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <label for="lnHandle">LinkedIn</label>
+                                                    <input class="txt-input" type="text" name="lnHandle" id="lnHandle" disabled placeholder="@LinkedIn">
+                                                </span>
+                                                <span class="d-flex justify-content-between">
+                                                    <label for="xHandle">X Handle</label>
+                                                    <input class="txt-input" type="text" name="xHandle" id="xHandle" disabled placeholder="@xHandle">
                                                 </span>
                                                 <span class="d-flex justify-content-between" style="position: relative;">
                                                     <label for="">Profile</label>
-                                                    <input type="file" class="ms-4">
+                                                    <input type="file" class="ms-4" disabled>
                                                 </span>
                                                 <div>
-                                                    <input type="submit" value="Save" class="btn btn-cprimary" style="width: 60px;">
+                                                    <input type="submit" value="Save" disabled class="submit-edit btn btn-cprimary" style="width: 60px;">
                                                 </div>
                                             </form>
                                         </div>
@@ -470,14 +478,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="modal-form">
-                            <form id="emailForm" class="d-flex flex-column justify-content-between">
+                            <form action="" id="emailForm" class="d-flex flex-column justify-content-between">
                                 <span class="input-field d-flex justify-content-between">
                                     <label for="prodId">Product Id</label>
                                     <input class="text-center" type="text" name="prodId" id="prodId" placeholder="">
-                                    <span class="confirm-product d-none">
-                                        <i class="bi bi-check-circle-fill"></i>
-                                        <span>Product found</span>
-                                    </span>
                                 </span>
                                 <span class="message-field d-flex flex-column">
                                     <label for="message">Compose Message</label>
