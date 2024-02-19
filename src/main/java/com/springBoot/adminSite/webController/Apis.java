@@ -125,8 +125,48 @@ public class Apis {
                 )
         );
     }
+    @GetMapping("/api/staffs/all")
+    public ResponseEntity<HttpResponse> fetchAllStaff(){
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message("All Staffs Retrieval success")
+                        .data(Map.of("staffs", staffService.getAllStaff()))
+                        .requestMethod("GET")
+                        .status(HttpStatus.OK)
+                        .statusCode(HttpStatus.OK.value())
+                        .build()
+                )
+        );
+    }
+    @PostMapping("/api/staffs/new")
+    public ResponseEntity<HttpResponse> registerStaff(@RequestBody StaffDto staffDto) {
+        String msg = staffService.registerStaff(staffDto);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
+    @PostMapping("/api/staffs/new/many")
+    public ResponseEntity<HttpResponse> registerManyStaff(@RequestBody List<StaffDto> staffDto) {
+        String msg = staffService.registerStaffs(staffDto);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
     @PostMapping("/api/staffs/edit")
     public ResponseEntity<HttpResponse> editStaff(@RequestBody StaffDto staffDto) {
+        System.out.println("\n\n\t\t" + staffDto + "\n\n");
         String msg = staffService.updateStaff(staffDto);
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()

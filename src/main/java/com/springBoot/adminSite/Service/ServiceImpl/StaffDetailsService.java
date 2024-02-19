@@ -1,6 +1,7 @@
 package com.springBoot.adminSite.Service.ServiceImpl;
 
 import com.springBoot.adminSite.Dto.StaffDto;
+import com.springBoot.adminSite.Entities.Staff;
 import com.springBoot.adminSite.Service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,12 +22,14 @@ public class StaffDetailsService implements UserDetailsService {
     private StaffService staffService;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        StaffDto staffDto = staffService.findUserByEmail(email);
-        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(staffDto.getRole()));
+        Staff staff = staffService.findUserByEmail(email);
+        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        authorities.add(new SimpleGrantedAuthority(staff.getRole()));
+        System.out.println("\n\n\t\t" + authorities + "\n\n");
         return (
                 new org.springframework.security.core.userdetails.User(
-                        staffDto.getEmail(),
-                        staffDto.getPassword(),
+                        staff.getEmail(),
+                        staff.getPassword(),
                         authorities
                 )
         );

@@ -35,6 +35,31 @@ var staffsArray = [
         "email":"candysynclare@gmail.com"
     }
 ]
+var table = $('#staff-table').DataTable({
+    "data": [],
+    pagingType: "simple",
+    pageLength: 5,
+    /* 'columnDefs': [
+       {
+            'targets': 0,
+            'checkboxes': {
+                'selectRow': true
+            }
+       },
+    ], */
+    "columns": [
+        {"data": "id"},
+        {"data": "name"},
+        {"data": "department"},
+        {"data": "phone"},
+        {"data": "email"}
+    ],
+    'select': {
+       'style': 'multi',
+       "selector": 'td:first-child'
+    },
+    'order': [[1, 'asc']],
+ })
 
 const apiEndPoint = "http://localhost:8080/api/"
 
@@ -65,17 +90,16 @@ var fetchLoggedInStaff = async() => {
 fetchLoggedInStaff().then(
     (response) => {
         loggedInStaff = response.data.staffDto
-        console.log(loggedInStaff)
         document.querySelector(".detail-name").innerText = loggedInStaff.name
         document.querySelector(".detail-ln").innerText = loggedInStaff.lnHandle
         document.querySelector(".detail-x").innerText = loggedInStaff.xHandle
+        document.querySelector(".detail-x").setAttribute("href", `https://x.com/${loggedInStaff.xHandle}`)
         document.querySelector(".detail-mail").innerText = loggedInStaff.email
 
         document.getElementById("settingsOffcanvas").querySelector("#staffEmail").value = loggedInStaff.email
         document.getElementById("settingsOffcanvas").querySelector("#staffPhone").value = loggedInStaff.phone
-        document.getElementById("settingsOffcanvas").querySelector("#lnHandle").value = loggedInStaff.lnHandle
-        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = loggedInStaff.xHandle
-        document.getElementById("settingsOffcanvas").querySelector("#xHandle").setAttribute("href", `https://x.com/${loggedInStaff.xHandle}`)
+        document.getElementById("settingsOffcanvas").querySelector("#lnHandle").value = (loggedInStaff.lnHandle == null) ? "N/A" : loggedInStaff.lnHandle
+        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = (loggedInStaff.xHandle == null) ? "N/A" : loggedInStaff.xHandle
         
         document.getElementById("toggle-edit").addEventListener("click", () => {
             document.getElementById("settingsOffcanvas").querySelector(".submit-edit").disabled = false
@@ -84,42 +108,18 @@ fetchLoggedInStaff().then(
             document.getElementById("settingsOffcanvas").querySelector("#lnHandle").disabled = false
             document.getElementById("settingsOffcanvas").querySelector("#xHandle").disabled = false
         })
-    }
-)
-/* fetchAllstaffs().then(
-    (response) => {
-        staffDtos = response.data.staffs
-        homeOps.registerProject()
-        homeOps.registerClient()
+
         staffArea.registerStaff()
     }
-) */
-
-var table = $('#staff-table').DataTable({
-    "data": staffsArray,
-    pagingType: "simple",
-    pageLength: 5,
-    /* 'columnDefs': [
-       {
-            'targets': 0,
-            'checkboxes': {
-                'selectRow': true
-            }
-       },
-    ], */
-    "columns": [
-        {"data": "id"},
-        {"data": "name"},
-        {"data": "department"},
-        {"data": "phone"},
-        {"data": "email"}
-    ],
-    'select': {
-       'style': 'multi',
-       "selector": 'td:first-child'
-    },
-    'order': [[1, 'asc']],
- })
+)
+fetchAllstaffs().then(
+    (response) => {
+        staffDtos = response.data.staffs
+        staffArea.populateObjects()
+        console.log(staffArea.staffObjects)
+        table.clear().rows.add(staffArea.staffObjects).draw()
+    }
+)
 var homeOps = {
     registerProject: function() {
         document.getElementById("prodForm").addEventListener("submit", (form) => {
@@ -216,6 +216,7 @@ var staffArea = {
                 "name": staffDtos[i].name,
                 "email": staffDtos[i].email,
                 "phone": staffDtos[i].phone,
+                "department": staffDtos[i].department,
                 "lnHandle": staffDtos[i].lnHandle,
                 "xHandle": staffDtos[i].xHandle
             }
@@ -247,11 +248,9 @@ var staffArea = {
             }).then((data) => {
                 if (data.statusCode === 201)
                 {
-                    document.querySelector(".confirm-product").classList.remove("d-none")
                     document.getElementById("staffModal").querySelector(".success").classList.replace("d-none", "d-flex")
                     setTimeout(() => {
                         document.getElementById("staffModal").querySelector(".success").classList.replace("d-flex", "d-none")
-                        document.querySelector(".confirm-product").classList.add("d-none")
                     }, 3800)
                     document.getElementById("staffModal").querySelector("form").reset()
                 }
@@ -291,20 +290,16 @@ var staffArea = {
             }).then((data) => {
                 if (data.statusCode === 201)
                 {
-                    document.querySelector(".confirm-product").classList.remove("d-none")
-                    document.getElementById("staffModal").querySelector(".success").classList.replace("d-none", "d-flex")
-                    setTimeout(() => {
-                        document.getElementById("staffModal").querySelector(".success").classList.replace("d-flex", "d-none")
-                        document.querySelector(".confirm-product").classList.add("d-none")
-                    }, 3800)
-                    document.getElementById("staffModal").querySelector("form").reset()
+                    console.log("Details editted successfully")
+                    document.getElementById("settingsOffcanvas").querySelector(".submit-edit").disabled = true
+                    document.getElementById("settingsOffcanvas").querySelector("#staffEmail").disabled = true
+                    document.getElementById("settingsOffcanvas").querySelector("#staffPhone").disabled = true
+                    document.getElementById("settingsOffcanvas").querySelector("#lnHandle").disabled = true
+                    document.getElementById("settingsOffcanvas").querySelector("#xHandle").disabled = true
                 }
                 else
                 {
-                    document.getElementById("staffModal").querySelector(".failure").classList.replace("d-none", "d-flex")
-                    setTimeout(() => {
-                        document.getElementById("staffModal").querySelector(".failure").classList.replace("d-flex", "d-none")
-                    }, 3800)
+                   console.log("Details editting unsuccessful")
                 }
             })
         })

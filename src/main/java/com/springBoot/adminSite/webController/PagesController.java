@@ -31,9 +31,9 @@ public class PagesController {
     }
     @GetMapping("/meladen/home")
     public String renderHomePage(Model model){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        StaffDto staffDto = staffService.findUserByEmail(auth.getName());
-        model.addAttribute("staffDto", staffDto);
+        //Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        //StaffDto staffDto = staffService.findStaffByEmail(auth.getName());
+        //model.addAttribute("staffDto", staffDto);
         return ("home");
     }
     @GetMapping("/meladen/staff/all")
@@ -43,8 +43,7 @@ public class PagesController {
     @GetMapping("/meladen/staffs/current")
     public ResponseEntity<HttpResponse> currentStaff(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        StaffDto staffDto = staffService.findUserByEmail(auth.getName());
-
+        StaffDto staffDto = staffService.findStaffByEmail(auth.getName());
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()
                         .message("Successful staff details retrieval")

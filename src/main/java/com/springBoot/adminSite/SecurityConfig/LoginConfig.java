@@ -35,7 +35,7 @@ public class LoginConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/", "/api/**").permitAll()
                         .requestMatchers("/js/**", "/css/**", "/imgs/**", "/meladen/staff/register", "/meladen/staff/setPassword").permitAll()
-                        .requestMatchers("/meladen/staff/all").hasAnyAuthority("Admin", "Staff")
+                        .requestMatchers("/meladen/staff/all").hasAuthority("Admin")
                         .anyRequest().authenticated()
                 )
                 .formLogin(
