@@ -3,6 +3,8 @@ package com.springBoot.adminSite.Service.ServiceImpl;
 import com.springBoot.adminSite.Dto.ClientDto;
 import com.springBoot.adminSite.Dto.StaffDto;
 import com.springBoot.adminSite.Entities.Client;
+import com.springBoot.adminSite.Entities.EMAIL_msg;
+import com.springBoot.adminSite.Repository.EMAIL_msgRepo;
 import com.springBoot.adminSite.Service.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +16,16 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class EmailServiceImpl implements EmailService {
+    @Autowired
+    private EMAIL_msgRepo emailMsgRepo;
     @Autowired
     private JavaMailSender mailSender;
     @Autowired
@@ -54,10 +60,16 @@ public class EmailServiceImpl implements EmailService {
     }
 
     @Override
-    public List<String> bulkClientMail(List<ClientDto> clientList, String subject, String message) {
+    public List<String> bulkClientMail(List<ClientDto> clientList, String subject, String message, Long projectId, LocalDate date) {
+        EMAIL_msg emailMsg = new EMAIL_msg();
+        emailMsg.setTitle(subject);
+        emailMsg.setBody(message);
+        emailMsg.setProjId(projectId);
+        emailMsg.setDate(date);
         List<String> responseList = clientList.stream()
                 .map(clientDto -> sendClientMail(clientDto,subject, message))
                 .toList();
+        emailMsgRepo.save(emailMsg);
         return (responseList);
     }
     @Async

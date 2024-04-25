@@ -17,8 +17,8 @@ public class StaffDto {
     private String phone;
     private String password;
     private String role;
-    private String xHandle;
+    private String xhandle;
     private String lnHandle;
-    private byte[] photo;
+    private String photo;
     private String department;
 }

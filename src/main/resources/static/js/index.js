@@ -80,11 +80,14 @@ var fetchLoggedInStaff = async() => {
 fetchLoggedInStaff().then(
     (response) => {
         loggedInStaff = response.data.staffDto
-        console.log(loggedInStaff)
+        document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
+            elem.setAttribute("src", `/files/staffs/photo?filename=${loggedInStaff.photo}`)
+        })
+        /* console.log(loggedInStaff) */
         document.getElementById("settingsOffcanvas").querySelector("#staffEmail").value = loggedInStaff.email
         document.getElementById("settingsOffcanvas").querySelector("#staffPhone").value = loggedInStaff.phone
         document.getElementById("settingsOffcanvas").querySelector("#lnHandle").value = (loggedInStaff.lnHandle == null) ? "N/A" : loggedInStaff.lnHandle
-        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = (loggedInStaff.xHandle == null) ? "N/A" : loggedInStaff.xHandle
+        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = (loggedInStaff.xhandle == null) ? "N/A" : loggedInStaff.xhandle
 
         document.getElementById("toggle-edit").addEventListener("click", () => {
             document.getElementById("settingsOffcanvas").querySelector(".submit-edit").disabled = false
@@ -94,6 +97,7 @@ fetchLoggedInStaff().then(
             document.getElementById("settingsOffcanvas").querySelector("#xHandle").disabled = false
         })
         staffOps.editStaff()
+        staffOps.profUpload()
     }
 )
 var fetchAllProjs = async() => {
@@ -167,9 +171,6 @@ var staffOps = {
             })
             jsonData["id"] = loggedInStaff.id
             console.log(jsonData)
-            /* const today = new Date()
-            var regDate = today.toISOString().slice(0, 10)
-            jsonData["registrationDate"] = regDate */
             fetch(
                 `${apiEndPoint}staffs/edit`,
                 {
@@ -195,6 +196,28 @@ var staffOps = {
                 {
                    console.log("Details editting unsuccessful")
                 }
+            })
+        })
+    },
+    profUpload: function() {
+        document.getElementById("prof-img-upload-form").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData()
+            var inputField = document.getElementById("img-upload")
+            var file = inputField.files[0]
+            formData.append("file", file)
+            formData.append("id", loggedInStaff.id)
+            console.log(formData)
+            fetch(
+                `${apiEndPoint}staffs/photo`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                console.log(data)
             })
         })
     }
@@ -333,7 +356,8 @@ var clientsArea = {
             var selectedProd = projDtos.find(obj => obj.id == jsonData.prodId)
             jsonData["clients"] = selectedProd.clientDtos
             const today = new Date()
-            var regDate = today.toISOString().slice(0, 10)
+            var date = today.toISOString().slice(0, 10)
+            jsonData["date"] = date
             fetch(
                 `${apiEndPoint}clients/sms`,
                 {
@@ -378,7 +402,8 @@ var clientsArea = {
             var selectedProd = projDtos.find(obj => obj.id == jsonData.prodId)
             jsonData["clients"] = selectedProd.clientDtos
             const today = new Date()
-            var regDate = today.toISOString().slice(0, 10)
+            var date = today.toISOString().slice(0, 10)
+            jsonData["date"] = date
 
             fetch(
                 `${apiEndPoint}clients/email`,

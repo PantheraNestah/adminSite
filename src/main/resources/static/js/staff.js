@@ -90,16 +90,20 @@ var fetchLoggedInStaff = async() => {
 fetchLoggedInStaff().then(
     (response) => {
         loggedInStaff = response.data.staffDto
+        document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
+            elem.setAttribute("src", `/files/staffs/photo?filename=${loggedInStaff.photo}`)
+        })
         document.querySelector(".detail-name").innerText = loggedInStaff.name
+        document.querySelector(".detail-dept").innerText = loggedInStaff.department
         document.querySelector(".detail-ln").innerText = loggedInStaff.lnHandle
-        document.querySelector(".detail-x").innerText = loggedInStaff.xHandle
+        document.querySelector(".detail-x").innerText = loggedInStaff.xhandle
         document.querySelector(".detail-x").setAttribute("href", `https://x.com/${loggedInStaff.xHandle}`)
         document.querySelector(".detail-mail").innerText = loggedInStaff.email
 
         document.getElementById("settingsOffcanvas").querySelector("#staffEmail").value = loggedInStaff.email
         document.getElementById("settingsOffcanvas").querySelector("#staffPhone").value = loggedInStaff.phone
         document.getElementById("settingsOffcanvas").querySelector("#lnHandle").value = (loggedInStaff.lnHandle == null) ? "N/A" : loggedInStaff.lnHandle
-        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = (loggedInStaff.xHandle == null) ? "N/A" : loggedInStaff.xHandle
+        document.getElementById("settingsOffcanvas").querySelector("#xHandle").value = (loggedInStaff.xhandle == null) ? "N/A" : loggedInStaff.xhandle
         
         document.getElementById("toggle-edit").addEventListener("click", () => {
             document.getElementById("settingsOffcanvas").querySelector(".submit-edit").disabled = false
@@ -110,6 +114,8 @@ fetchLoggedInStaff().then(
         })
 
         staffArea.registerStaff()
+        staffArea.editStaff()
+        staffArea.profUpload()
     }
 )
 fetchAllstaffs().then(
@@ -269,13 +275,11 @@ var staffArea = {
             form.preventDefault()
             const formData = new FormData(form.target)
             const jsonData = {}
+            jsonData["id"] = loggedInStaff.id
             formData.forEach((value, key) => {
                 jsonData[key] = value
             })
-            jsonData["id"] = loggedInStaff.id
-            /* const today = new Date()
-            var regDate = today.toISOString().slice(0, 10)
-            jsonData["registrationDate"] = regDate */
+            console.log(jsonData)
             fetch(
                 `${apiEndPoint}staffs/edit`,
                 {
@@ -301,6 +305,28 @@ var staffArea = {
                 {
                    console.log("Details editting unsuccessful")
                 }
+            })
+        })
+    },
+    profUpload: function() {
+        document.getElementById("prof-img-upload-form").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData()
+            var inputField = document.getElementById("img-upload")
+            var file = inputField.files[0]
+            formData.append("file", file)
+            formData.append("id", loggedInStaff.id)
+            console.log(formData)
+            fetch(
+                `${apiEndPoint}staffs/photo`,
+                {
+                    method: "POST",
+                    body: formData
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                console.log(data)
             })
         })
     }

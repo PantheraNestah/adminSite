@@ -23,8 +23,8 @@ public class Project {
     @Column(name = "value")
     private Long value;
     @Lob
-    @Column(name = "photo", columnDefinition = "BLOB")
-    private Byte[] photo;
+    @Column(name = "photo")
+    private String photo;
     @Column(name = "date_created")
     @Temporal(TemporalType.DATE)
     private Date dateCreated;

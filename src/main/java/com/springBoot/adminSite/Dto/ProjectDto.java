@@ -16,7 +16,7 @@ public class ProjectDto {
     private Long id;
     private String prodName;
     private Long prodValue;
-    private Byte[] photo;
+    private String photo;
     private Date creationDate;
     private List<ClientDto> clientDtos;
 }

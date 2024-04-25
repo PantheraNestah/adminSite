@@ -7,8 +7,10 @@ import com.springBoot.adminSite.Repository.StaffRepo;
 import com.springBoot.adminSite.Service.EmailService;
 import com.springBoot.adminSite.Service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,8 @@ public class    StaffServiceImpl implements StaffService {
     private EmailService emailService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FilesService filesService;
     @Override
     public String registerStaff(StaffDto staff) {
         Staff staffEntity = new Staff();
@@ -46,16 +50,30 @@ public class    StaffServiceImpl implements StaffService {
     @Override
     public String updateStaff(StaffDto staffDto) {
         Staff staff = staffRepo.findById(staffDto.getId()).get();
-        //staff.setId(staffDto.getId());
-        //staff.setName(staffDto.getName());
         staff.setEmail(staffDto.getEmail());
         staff.setPhone(staffDto.getPhone());
-        //staff.setRole(staffDto.getRole());
         staff.setLnHandle(staffDto.getLnHandle());
-        staff.setXHandle(staffDto.getXHandle());
-        // staff.setProfileImage(staffDto.getPhoto());
+        staff.setXhandle(staffDto.getXhandle());
         staffRepo.save(staff);
         return ("Staff details successfully updated");
+    }
+    @Override
+    public String updatePhoto(MultipartFile file, Long staffId)
+    {
+        String expectedMsg = "File: " + file.getOriginalFilename() + " saved successfully";
+        String msg = filesService.saveStaffPhoto(file);
+        if(msg.equals(expectedMsg))
+        {
+            Staff staff = staffRepo.findById(staffId).get();
+            staff.setProfileImage(file.getOriginalFilename());
+            staffRepo.save(staff);
+        }
+        return (msg);
+    }
+    @Override
+    public Resource retrieveStaffPhoto(String filename)
+    {
+        return (filesService.retrieveStaffPhoto(filename));
     }
     @Override
     public String staffSetPasswordMail(String eMail) {
@@ -102,7 +120,7 @@ public class    StaffServiceImpl implements StaffService {
         staffDto1.setPhone(staffEntity.getPhone());
         staffDto1.setPassword(staffEntity.getPassword());
         staffDto1.setPhoto(staffEntity.getProfileImage());
-        staffDto1.setXHandle(staffEntity.getXHandle());
+        staffDto1.setXhandle(staffEntity.getXhandle());
         staffDto1.setLnHandle(staffEntity.getLnHandle());
         staffDto1.setRole(staffEntity.getRole());
         staffDto1.setDepartment(staffEntity.getDepartment());
@@ -117,7 +135,7 @@ public class    StaffServiceImpl implements StaffService {
         staff.setPhone(staffDto.getPhone());
         staff.setPassword(staffDto.getPassword());
         staff.setProfileImage(staffDto.getPhoto());
-        staff.setXHandle(staffDto.getXHandle());
+        staff.setXhandle(staffDto.getXhandle());
         staff.setLnHandle(staffDto.getLnHandle());
         staff.setRole(staffDto.getRole());
         staff.setDepartment(staffDto.getDepartment());

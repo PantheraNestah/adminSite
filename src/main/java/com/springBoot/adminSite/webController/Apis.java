@@ -5,12 +5,12 @@ import com.springBoot.adminSite.Service.ClientService;
 import com.springBoot.adminSite.Service.ProjectService;
 import com.springBoot.adminSite.Service.StaffService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -177,5 +177,35 @@ public class Apis {
                         .build()
                 )
         );
+    }
+    @PostMapping("/api/staffs/photo")
+    public ResponseEntity<HttpResponse> storePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam("id") Long staffId)
+    {
+        String msg = staffService.updatePhoto(multipartFile, staffId);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
+   @GetMapping(
+            value = "/files/staffs/photo",
+            produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public ResponseEntity<Resource> getStaffPhoto(@RequestParam("filename") String filename)
+    {
+        //System.out.println("\n\n\t" + filename + "\n\n");
+        Resource fileResource = staffService.retrieveStaffPhoto(filename);
+        if(fileResource.exists())
+        {
+            return ResponseEntity.ok()
+                    .body(fileResource);
+        }
+        return ResponseEntity.notFound()
+                .build();
     }
 }

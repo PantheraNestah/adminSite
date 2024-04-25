@@ -29,10 +29,10 @@ public class Staff {
     @Column(name = "department", length = 100)
     private String department;
     @Lob
-    @Column(name = "photo", columnDefinition = "BLOB")
-    private byte[] profileImage;
+    @Column(name = "photo")
+    private String profileImage;
     @Column(name = "x_handle", length = 100)
-    private String xHandle;
+    private String xhandle;
     @Column(name = "ln_handle", length = 100)
     private String lnHandle;
 }

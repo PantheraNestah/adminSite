@@ -44,6 +44,7 @@ public class PagesController {
     public ResponseEntity<HttpResponse> currentStaff(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         StaffDto staffDto = staffService.findStaffByEmail(auth.getName());
+        System.out.println("\n\n\t\t" + staffDto + "\n\n");
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()
                         .message("Successful staff details retrieval")

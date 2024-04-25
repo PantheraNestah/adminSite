@@ -78,7 +78,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public String bulkClientMail(MessageDto messageDto) {
         //List<Client> clientList = clientRepo.findByProjId(messageDto.getProdId());
-        emailService.bulkClientMail(messageDto.getClients(), messageDto.getSubject(), messageDto.getMsg());
+        emailService.bulkClientMail(messageDto.getClients(), messageDto.getSubject(), messageDto.getMessage(), messageDto.getProdId(), messageDto.getDate());
         return ("Bulk client Mail successfully sent");
     }
     @Override
@@ -87,7 +87,7 @@ public class ClientServiceImpl implements ClientService {
                 .map((client) -> {return client.getPhone();})
                 .toList();
         String[] contactArray = clients.toArray(new String[0]);
-        smsService.sendClientSms(messageDto.getMsg(), contactArray);
-        return ("Bulk client Mail successfully sent");
+        smsService.sendClientSms(messageDto.getSubject(), messageDto.getMessage(), contactArray, messageDto.getProdId(), messageDto.getDate());
+        return ("Bulk client SMS successfully sent");
     }
 }
