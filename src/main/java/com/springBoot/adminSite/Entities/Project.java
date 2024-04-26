@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class Project {
     private String photo;
     @Column(name = "date_created")
     @Temporal(TemporalType.DATE)
-    private Date dateCreated;
+    private LocalDate dateCreated;
     @OneToMany(mappedBy = "project")
     private List<Client> clients;
 

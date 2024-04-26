@@ -45,6 +45,9 @@ public class    StaffServiceImpl implements StaffService {
                 .map(this::mapDtoToEntity)
                 .toList();
         staffRepo.saveAll(staffList);
+        staffList.stream()
+                .map(staff -> staffSetPasswordMail(staff.getEmail()))
+                .toList();
         return ("Multiple staffs registration successful");
     }
     @Override

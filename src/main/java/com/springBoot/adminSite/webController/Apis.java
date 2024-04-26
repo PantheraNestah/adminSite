@@ -79,6 +79,20 @@ public class Apis {
                 )
         );
     }
+    @PostMapping("/api/projects/new/photo")
+    public  ResponseEntity<HttpResponse> newProjectPhoto(@RequestParam("file") MultipartFile file, @RequestParam("id") String projectName)
+    {
+        String msg = projectService.saveProjectPhoto(file, projectName);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
     @PostMapping("/api/projects/photo")
     public ResponseEntity<HttpResponse> saveProjectPhoto(@RequestParam("file") MultipartFile file, @RequestParam("id") Long id)
     {

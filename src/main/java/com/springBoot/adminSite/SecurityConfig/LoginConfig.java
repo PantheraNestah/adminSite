@@ -33,9 +33,9 @@ public class LoginConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/", "/api/**").permitAll()
+                        .requestMatchers("/").permitAll()
                         .requestMatchers("/js/**", "/css/**", "/imgs/**", "/meladen/staff/register", "/meladen/staff/setPassword").permitAll()
-                        .requestMatchers("/meladen/staff/all").hasAuthority("Admin")
+                        .requestMatchers("/meladen/staff/all", "/api/**").hasAnyAuthority("Admin", "Staff")
                         .anyRequest().authenticated()
                 )
                 .formLogin(

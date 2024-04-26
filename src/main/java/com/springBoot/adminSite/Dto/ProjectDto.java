@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +18,6 @@ public class ProjectDto {
     private String prodName;
     private Long prodValue;
     private String photo;
-    private Date creationDate;
+    private LocalDate creationDate;
     private List<ClientDto> clientDtos;
 }

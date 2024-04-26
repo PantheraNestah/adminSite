@@ -253,6 +253,13 @@ var projectsArea = {
             const today = new Date()
             var regDate = today.toISOString().slice(0, 10)
             jsonData["creationDate"] = regDate
+            if(jsonData.prodValue.endsWith("M"))
+            {
+                var val = jsonData.prodValue.slice(0, -1)
+                jsonData["prodValue"] = val * 1000000
+            }
+            var fileField = document.getElementById("prodPhoto")
+            var projectName = jsonData.prodName
             fetch(
                 `${apiEndPoint}projects/new`,
                 {
@@ -267,11 +274,12 @@ var projectsArea = {
             }).then((data) => {
                 if (data.statusCode === 201)
                 {
+                    this.sendFiles(fileField, "projects/new/photo", projectName)
                     document.getElementById("prodModal").querySelector(".success").classList.replace("d-none", "d-flex")
                     setTimeout(() => {
                         document.getElementById("prodModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.getElementById("prodModal").querySelector("form").reset()
                     }, 3800)
-                    document.getElementById("prodModal").querySelector("form").reset()
                 }
                 else
                 {
@@ -295,7 +303,7 @@ var projectsArea = {
             document.getElementById("prodNameEdit").value = project.name
             document.getElementById("prodValueEdit").value = project.value
             document.getElementById("clientsEdit").value = project.clients
-            document.getElementById("prodPhotoEdit").value = (project.photo != null) ? project.photo : "no_file"
+            document.getElementById("prodPhotoEdit").value = ""
         })
         document.getElementById("prodFormEdit").addEventListener("submit", (form) => {
             form.preventDefault()
@@ -304,9 +312,15 @@ var projectsArea = {
             formData.forEach((value, key) => {
                 jsonData[key] = value
             })
+            if(jsonData.prodValue.endsWith("M"))
+            {
+                var val = jsonData.prodValue.slice(0, -1)
+                jsonData["prodValue"] = val * 1000000
+            }
             /* console.log(jsonData) */
+            var fileField = document.getElementById("prodPhotoEdit")
             fetch(
-                `${apiEndPoint}staffs/update`,
+                `${apiEndPoint}projects/update`,
                 {
                     method: "POST",
                     headers: {
@@ -319,11 +333,12 @@ var projectsArea = {
             }).then((data) => {
                 if (data.statusCode === 201)
                 {
+                    this.sendFiles(fileField, "projects/photo", jsonData.id)
                     document.getElementById("prodModalEdit").querySelector(".success").classList.replace("d-none", "d-flex")
                     setTimeout(() => {
                         document.getElementById("prodModalEdit").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.getElementById("prodModalEdit").querySelector("form").reset()
                     }, 3800)
-                    document.getElementById("prodModalEdit").querySelector("form").reset()
                 }
                 else
                 {
@@ -339,7 +354,8 @@ var projectsArea = {
         var file = inputField.files[0]
         const formData = new FormData()
         formData.append("file", file)
-        formData.append("id", ownerId)
+        if(ownerId != null)
+        {formData.append("id", ownerId)}
         fetch(
             `${apiEndPoint}${endPoint}`,
             {
@@ -405,8 +421,8 @@ var clientsArea = {
                     setTimeout(() => {
                         document.getElementById("clientModal").querySelector(".success").classList.replace("d-flex", "d-none")
                         document.querySelector(".confirm-product").classList.add("d-none")
+                        document.getElementById("clientModal").querySelector("form").reset()
                     }, 3800)
-                    document.getElementById("clientModal").querySelector("form").reset()
                 }
                 else
                 {

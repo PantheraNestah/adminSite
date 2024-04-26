@@ -35,7 +35,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public String updateProject(ProjectDto projectDto)
     {
-        Project project = mapDtoToEntity(projectDto);
+        Project project = projectRepo.findById(projectDto.getId()).get();
+        project.setId(projectDto.getId());
+        project.setValue(projectDto.getProdValue());
+        project.setName(projectDto.getProdName());
         projectRepo.save(project);
         return ("Project updated successfully");
     }
@@ -47,6 +50,19 @@ public class ProjectServiceImpl implements ProjectService {
         if(msg.equals(expectedMsg))
         {
             Project project = projectRepo.findById(projectId).get();
+            project.setPhoto(file.getOriginalFilename());
+            projectRepo.save(project);
+        }
+        return (msg);
+    }
+    @Override
+    public String saveProjectPhoto(MultipartFile file, String projectName)
+    {
+        String expectedMsg = "File: " + file.getOriginalFilename() + " saved successfully";
+        String msg = filesService.saveProjectPhoto(file);
+        if(msg.equals(expectedMsg))
+        {
+            Project project = projectRepo.findByName(projectName);
             project.setPhoto(file.getOriginalFilename());
             projectRepo.save(project);
         }

@@ -31,6 +31,7 @@ public class ClientServiceImpl implements ClientService {
         clientEntity.setName(clientDto.getName());
         clientEntity.setEmail(clientDto.getEmail());
         clientEntity.setPhone(clientDto.getPhone());
+        clientEntity.setRegistrationDate(clientDto.getRegistrationDate());
         clientEntity.setProject(projectRepo.findById(clientDto.getProdId()).get());
         clientRepo.save(clientEntity);
         return ("Client registration Successful");

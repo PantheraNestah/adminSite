@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -25,7 +26,7 @@ public class Client {
     private String phone;
     @Column(name = "date_added")
     @Temporal(TemporalType.DATE)
-    private Date registrationDate;
+    private LocalDate registrationDate;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private Project project;

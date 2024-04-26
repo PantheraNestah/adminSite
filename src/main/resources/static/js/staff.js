@@ -116,13 +116,16 @@ fetchLoggedInStaff().then(
         staffArea.registerStaff()
         staffArea.editStaff()
         staffArea.profUpload()
+
+        homeOps.registerProject()
+        homeOps.registerClient()
     }
 )
 fetchAllstaffs().then(
     (response) => {
         staffDtos = response.data.staffs
         staffArea.populateObjects()
-        console.log(staffArea.staffObjects)
+        /* console.log(staffArea.staffObjects) */
         table.clear().rows.add(staffArea.staffObjects).draw()
     }
 )
@@ -138,6 +141,13 @@ var homeOps = {
             const today = new Date()
             var regDate = today.toISOString().slice(0, 10)
             jsonData["creationDate"] = regDate
+            if(jsonData.prodValue.endsWith("M"))
+            {
+                var val = jsonData.prodValue.slice(0, -1)
+                jsonData["prodValue"] = val * 1000000
+            }
+            var fileField = document.getElementById("prodPhoto")
+            var projectName = jsonData.prodName
             fetch(
                 `${apiEndPoint}projects/new`,
                 {
@@ -152,11 +162,12 @@ var homeOps = {
             }).then((data) => {
                 if (data.statusCode === 201)
                 {
+                    this.sendFiles(fileField, "projects/new/photo", projectName)
                     document.getElementById("prodModal").querySelector(".success").classList.replace("d-none", "d-flex")
                     setTimeout(() => {
                         document.getElementById("prodModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.getElementById("prodModal").querySelector("form").reset()
                     }, 3800)
-                    document.getElementById("prodModal").querySelector("form").reset()
                 }
                 else
                 {
@@ -198,8 +209,8 @@ var homeOps = {
                     setTimeout(() => {
                         document.getElementById("clientModal").querySelector(".success").classList.replace("d-flex", "d-none")
                         document.querySelector(".confirm-product").classList.add("d-none")
+                        document.getElementById("clientModal").querySelector("form").reset()
                     }, 3800)
-                    document.getElementById("clientModal").querySelector("form").reset()
                 }
                 else
                 {
@@ -209,6 +220,24 @@ var homeOps = {
                     }, 3800)
                 }
             })
+        })
+    },
+    sendFiles: function(inputField, endPoint, ownerId) {
+        var file = inputField.files[0]
+        const formData = new FormData()
+        formData.append("file", file)
+        if(ownerId != null)
+        {formData.append("id", ownerId)}
+        fetch(
+            `${apiEndPoint}${endPoint}`,
+            {
+                method: "POST",
+                body: formData
+            }
+        ).then((response) => {
+            return response.json()
+        }).then((data) => {
+            console.log(data)
         })
     }
 }
@@ -257,8 +286,8 @@ var staffArea = {
                     document.getElementById("staffModal").querySelector(".success").classList.replace("d-none", "d-flex")
                     setTimeout(() => {
                         document.getElementById("staffModal").querySelector(".success").classList.replace("d-flex", "d-none")
+                        document.getElementById("staffModal").querySelector("form").reset()
                     }, 3800)
-                    document.getElementById("staffModal").querySelector("form").reset()
                 }
                 else
                 {
