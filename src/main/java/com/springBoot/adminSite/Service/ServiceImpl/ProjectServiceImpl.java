@@ -7,6 +7,7 @@ import com.springBoot.adminSite.Service.ClientService;
 import com.springBoot.adminSite.Service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,6 +20,8 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectDto projectDtoMain;
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private FilesService filesService;
     @Override
     public String registerProject(ProjectDto projectDto) {
         Project projectEntity = new Project();
@@ -29,7 +32,26 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepo.save(projectEntity);
         return ("Project Registration Successful");
     }
-
+    @Override
+    public String updateProject(ProjectDto projectDto)
+    {
+        Project project = mapDtoToEntity(projectDto);
+        projectRepo.save(project);
+        return ("Project updated successfully");
+    }
+    @Override
+    public String saveProjectPhoto(MultipartFile file, Long projectId)
+    {
+        String expectedMsg = "File: " + file.getOriginalFilename() + " saved successfully";
+        String msg = filesService.saveProjectPhoto(file);
+        if(msg.equals(expectedMsg))
+        {
+            Project project = projectRepo.findById(projectId).get();
+            project.setPhoto(file.getOriginalFilename());
+            projectRepo.save(project);
+        }
+        return (msg);
+    }
     @Override
     public String registerProjects(List<ProjectDto> projectDtoList) {
         List<Project> projects = projectDtoList.stream()

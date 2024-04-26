@@ -153,10 +153,12 @@ fetchAllProjs().then(
         )
         clientsArea.selectOpts()
         clientsArea.updateTableOnSelect(clientsDataTable)
-        projectsArea.registerProject()
         clientsArea.registerClient()
         clientsArea.emailClients()
         clientsArea.smsClients()
+
+        projectsArea.registerProject()
+        projectsArea.updateProject()
     }
 )
 
@@ -235,6 +237,7 @@ var projectsArea = {
                 "name": projDtos[i].prodName,
                 "value": `${projDtos[i].prodValue / 1000000}M`,
                 "clients": projDtos[i].clientDtos.length,
+                "photo": (projDtos[i].photo == null) ? "N/A" : projDtos[i].photo
             }
             this.projObjects.push(obj)
         }
@@ -279,6 +282,75 @@ var projectsArea = {
                 }
             })
         })
+    },
+    updateProject: function() {
+        document.getElementById("searchProdId").addEventListener("click", () => {
+            var id = document.getElementById("prodIdEdit").value
+            var project = this.projObjects.find((obj) => obj.id == id)
+
+            document.getElementById("prodNameEdit").disabled = false
+            document.getElementById("prodValueEdit").disabled = false
+            document.getElementById("prodPhotoEdit").disabled = false
+
+            document.getElementById("prodNameEdit").value = project.name
+            document.getElementById("prodValueEdit").value = project.value
+            document.getElementById("clientsEdit").value = project.clients
+            document.getElementById("prodPhotoEdit").value = (project.photo != null) ? project.photo : "no_file"
+        })
+        document.getElementById("prodFormEdit").addEventListener("submit", (form) => {
+            form.preventDefault()
+            const formData = new FormData(form.target)
+            const jsonData = {}
+            formData.forEach((value, key) => {
+                jsonData[key] = value
+            })
+            /* console.log(jsonData) */
+            fetch(
+                `${apiEndPoint}staffs/update`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(jsonData)
+                }
+            ).then((response) => {
+                return response.json()
+            }).then((data) => {
+                if (data.statusCode === 201)
+                {
+                    document.getElementById("prodModalEdit").querySelector(".success").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("prodModalEdit").querySelector(".success").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                    document.getElementById("prodModalEdit").querySelector("form").reset()
+                }
+                else
+                {
+                    document.getElementById("prodModalEdit").querySelector(".failure").classList.replace("d-none", "d-flex")
+                    setTimeout(() => {
+                        document.getElementById("prodModalEdit").querySelector(".failure").classList.replace("d-flex", "d-none")
+                    }, 3800)
+                }
+            })
+        })
+    },
+    sendFiles: function(inputField, endPoint, ownerId) {
+        var file = inputField.files[0]
+        const formData = new FormData()
+        formData.append("file", file)
+        formData.append("id", ownerId)
+        fetch(
+            `${apiEndPoint}${endPoint}`,
+            {
+                method: "POST",
+                body: formData
+            }
+        ).then((response) => {
+            return response.json()
+        }).then((data) => {
+            console.log(data)
+        })
     }
 }
 
@@ -287,6 +359,7 @@ var clientsArea = {
     clientObjects: [],
     selectElem: document.getElementById("projectsList"),
     selectOpts: function() {
+        document.querySelector(".clients-prop-label").innerText = projectsArea.projectsNamesArray[0] + " Clients"
         for (let i = 0;i < projectsArea.projectsNamesArray.length;i++){
             var opt = document.createElement("option")
             opt.innerText = projectsArea.projectsNamesArray[i]
@@ -298,6 +371,7 @@ var clientsArea = {
         this.selectElem.addEventListener("change", (event) => {
             var idx = event.target.value
             console.log(`Array of index ${idx} to be used`)
+            document.querySelector(".clients-prop-label").innerText = projDtos[idx].prodName + " Clients"
             table.clear().rows.add(projDtos[idx].clientDtos).draw()
         })
     },

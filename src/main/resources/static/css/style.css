@@ -600,10 +600,10 @@ main .current-staff .prof-body .info-container a.btn {
   font-size: 20px;
 }
 
-.clientModal .modal-content, .prodModal .modal-content, .staffModal .modal-content, .messageModal .modal-content {
+.clientModal .modal-content, .prodModal .modal-content, .prodModalEdit .modal-content, .staffModal .modal-content, .messageModal .modal-content {
   background-color: #ffe5d0;
 }
-.clientModal .myModal-title, .prodModal .myModal-title, .staffModal .myModal-title, .messageModal .myModal-title {
+.clientModal .myModal-title, .prodModal .myModal-title, .prodModalEdit .myModal-title, .staffModal .myModal-title, .messageModal .myModal-title {
   font-size: 20px;
 }
 
@@ -664,6 +664,31 @@ main .current-staff .prof-body .info-container a.btn {
 }
 .clientModal .modal-form form, .staffModal .modal-form form {
   height: 250px;
+}
+
+.prodModalEdit .modal-form {
+  height: 370px;
+}
+.prodModalEdit .modal-form form {
+  height: 280px;
+}
+.prodModalEdit .modal-form .searchField {
+  width: 180px;
+}
+.prodModalEdit .modal-form .searchField input {
+  width: 130px;
+}
+.prodModalEdit .modal-form .searchField span {
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: #495057;
+  cursor: pointer;
+}
+.prodModalEdit .modal-form .searchField span i {
+  font-size: 14px;
+  font-weight: bold;
+  color: #f8f9fa;
 }
 
 .prodModal .modal-form {
