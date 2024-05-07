@@ -1,4 +1,6 @@
-const apiEndPoint = "http://localhost:8080/api/"
+//const baseUrl = "https://2822-105-161-228-53.ngrok-free.app"
+const baseUrl = "http://localhost:8080"
+const apiEndPoint = `${baseUrl}/api/`
 
 var projDtos = []
 var clientDtos = []
@@ -69,7 +71,7 @@ var clientsArray = [
 
 var fetchLoggedInStaff = async() => {
     var cstaffPromise = await fetch(
-        "http://localhost:8080/meladen/staffs/current",
+        `${baseUrl}/meladen/staffs/current`,
         {
             method: "GET"
         }
@@ -80,9 +82,15 @@ var fetchLoggedInStaff = async() => {
 fetchLoggedInStaff().then(
     (response) => {
         loggedInStaff = response.data.staffDto
-        document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
+        if(loggedInStaff.photo != null)
+        {
+            document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
+                elem.setAttribute("src", `/files/staffs/photo?filename=${loggedInStaff.photo}`)
+            })
+        }
+        /* document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
             elem.setAttribute("src", `/files/staffs/photo?filename=${loggedInStaff.photo}`)
-        })
+        }) */
         /* console.log(loggedInStaff) */
         document.getElementById("settingsOffcanvas").querySelector("#staffEmail").value = loggedInStaff.email
         document.getElementById("settingsOffcanvas").querySelector("#staffPhone").value = loggedInStaff.phone

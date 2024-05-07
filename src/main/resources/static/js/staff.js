@@ -61,7 +61,9 @@ var table = $('#staff-table').DataTable({
     'order': [[1, 'asc']],
  })
 
-const apiEndPoint = "http://localhost:8080/api/"
+ //const baseUrl = "https://2822-105-161-228-53.ngrok-free.app"
+ const baseUrl = "http://localhost:8080"
+ const apiEndPoint = `${baseUrl}/api/`/* "http://localhost:8080/api/" */
 
 var staffDtos = []
 var loggedInStaff
@@ -78,7 +80,7 @@ var fetchAllstaffs = async() => {
 }
 var fetchLoggedInStaff = async() => {
     var cstaffPromise = await fetch(
-        "http://localhost:8080/meladen/staffs/current",
+        `${baseUrl}/meladen/staffs/current`,
         {
             method: "GET"
         }
@@ -90,13 +92,19 @@ var fetchLoggedInStaff = async() => {
 fetchLoggedInStaff().then(
     (response) => {
         loggedInStaff = response.data.staffDto
-        document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
+        if(loggedInStaff.photo != null)
+        {
+            document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
+                elem.setAttribute("src", `/files/staffs/photo?filename=${loggedInStaff.photo}`)
+            })
+        }
+       /*  document.querySelectorAll(".staff-prof-photo").forEach((elem) => {
             elem.setAttribute("src", `/files/staffs/photo?filename=${loggedInStaff.photo}`)
-        })
+        }) */
         document.querySelector(".detail-name").innerText = loggedInStaff.name
         document.querySelector(".detail-dept").innerText = loggedInStaff.department
-        document.querySelector(".detail-ln").innerText = loggedInStaff.lnHandle
-        document.querySelector(".detail-x").innerText = loggedInStaff.xhandle
+        document.querySelector(".detail-ln").innerText = (loggedInStaff.lnHandle == null) ? "Not Updated" : loggedInStaff.lnHandle
+        document.querySelector(".detail-x").innerText = (loggedInStaff.xhandle == null) ? "Not Updated" : loggedInStaff.xhandle
         document.querySelector(".detail-x").setAttribute("href", `https://x.com/${loggedInStaff.xHandle}`)
         document.querySelector(".detail-mail").innerText = loggedInStaff.email
 
