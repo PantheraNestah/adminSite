@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
-@Configuration
+//@Service
+//@Configuration
 public class StaffDetailsService implements UserDetailsService {
-    @Autowired
+    //@Autowired
     private StaffService staffService;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

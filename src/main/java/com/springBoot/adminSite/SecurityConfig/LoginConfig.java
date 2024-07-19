@@ -12,13 +12,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-@Configuration
-@EnableWebSecurity
+//@Configuration
+//@EnableWebSecurity
 public class LoginConfig {
-    @Autowired
-    private StaffDetailsService staffDetailsService;
-    @Autowired
-    private LoginSuccesshandler successhandler;
+    //@Autowired
+    //private StaffDetailsService staffDetailsService;
+    //@Autowired
+    /*private LoginSuccesshandler successhandler;
     @Bean
     GrantedAuthorityDefaults grantedAuthorityDefaults()
     {
@@ -52,4 +52,6 @@ public class LoginConfig {
                 );
         return (http.build());
     }
+
+     */
 }
