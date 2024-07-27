@@ -1,5 +1,7 @@
 package com.springBoot.adminSite.SecurityConfig;
 
+import com.springBoot.adminSite.My_Exceptions.JwtTokenInvalidException;
+import com.springBoot.adminSite.My_Exceptions.JwtTokenMissingException;
 import com.springBoot.adminSite.Service.ServiceImpl.JwtService;
 import com.springBoot.adminSite.Service.ServiceImpl.StaffDetailsService2;
 import jakarta.servlet.FilterChain;
@@ -33,6 +35,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             token = authHeader.substring(7);
             username = jwtService.extractUsername(token);
         }
+        /*else if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            throw new JwtTokenMissingException("JWT Token is missing");
+        }*/
+        
         if ((username != null && SecurityContextHolder.getContext().getAuthentication() == null))
         {
             UserDetails userDetails = staffDetailsService2.loadUserByUsername(username);
@@ -41,7 +47,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+            } else if (!jwtService.validateToken(token, userDetails)) {
+                throw new JwtTokenInvalidException("JWT Token is invalid");
             }
+        } else if (username == null || SecurityContextHolder.getContext().getAuthentication() != null) {
+            throw new JwtTokenInvalidException("JWT Token is invalid");
         }
         filterChain.doFilter(request, response);
     }

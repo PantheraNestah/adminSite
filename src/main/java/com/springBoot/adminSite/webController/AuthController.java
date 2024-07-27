@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,12 +32,15 @@ public class AuthController {
     @PostMapping("/generateToken")
     public ResponseEntity<HttpResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        Map<String, Object> auth_details = new HashMap<>();
         if (authentication.isAuthenticated()) {
-            String token = jwtService.generateToken(authRequest.getUsername());
+            auth_details = jwtService.generateToken(authRequest.getUsername());
+            String token = auth_details.get("token").toString();
             System.out.println("\n\n\t\t" + token + "\n\n");
             return (
                 ResponseEntity.ok().body(HttpResponse.builder()
                                 .message(token)
+                                .data(auth_details) 
                                 .requestMethod("POST")
                                 .status(HttpStatus.OK)
                                 .statusCode(HttpStatus.OK.value())
