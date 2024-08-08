@@ -10,6 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,8 +20,13 @@ import java.util.function.Function;
 
 @Component
 public class JwtService {
+    private final long token_duration_hours = 1;
     private final long token_duration_millis = 1000 * 60 * 60;
+    private final LocalDateTime now = LocalDateTime.now();
+    private final LocalDateTime expiryTime = now.plusHours(token_duration_hours + 3);
+    private final ZonedDateTime zonedExpiryTime = expiryTime.atZone(ZoneId.systemDefault());
     private final Date token_expiry = new Date(System.currentTimeMillis() + token_duration_millis);
+    private final Date token_expiry_hours = Date.from(zonedExpiryTime.toInstant());
     public static final String SECRET =
             "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
     public Map<String, Object> generateToken(String email)
@@ -27,7 +35,9 @@ public class JwtService {
         String token = createToken(claims, email);
         Map<String, Object> auth_details = new HashMap<>();
         auth_details.put("token", token);
-        auth_details.put("expiry", token_expiry);
+        auth_details.put("expiry", token_expiry_hours);
+        //System.out.println("\n\n\t" + token_expiry);
+        System.out.println("\n\n\t" + token_expiry_hours + "\n");
         return auth_details;
     }
     private String createToken(Map<String, Object> claims, String email)
@@ -37,7 +47,7 @@ public class JwtService {
                         .setClaims(claims)
                         .setSubject(email)
                         .setIssuedAt(new Date(System.currentTimeMillis()))
-                        .setExpiration(token_expiry)
+                        .setExpiration(token_expiry_hours)
                         .signWith(getSignKey(), SignatureAlgorithm.HS256).compact()
         );
     }
