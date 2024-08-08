@@ -35,9 +35,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             token = authHeader.substring(7);
             username = jwtService.extractUsername(token);
         }
-        /*else if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new JwtTokenMissingException("JWT Token is missing");
-        }*/
         
         if ((username != null && SecurityContextHolder.getContext().getAuthentication() == null))
         {
@@ -50,8 +47,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             } else if (!jwtService.validateToken(token, userDetails)) {
                 throw new JwtTokenInvalidException("JWT Token is invalid");
             }
-        } else if (username == null || SecurityContextHolder.getContext().getAuthentication() != null) {
-            throw new JwtTokenInvalidException("JWT Token is invalid");
         }
         filterChain.doFilter(request, response);
     }
