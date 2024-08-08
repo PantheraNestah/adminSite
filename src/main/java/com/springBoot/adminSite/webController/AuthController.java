@@ -31,6 +31,7 @@ public class AuthController {
 
     @PostMapping("/generateToken")
     public ResponseEntity<HttpResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
+        System.out.println("\n\n\t" + authRequest + "\n");
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         Map<String, Object> auth_details = new HashMap<>();
         if (authentication.isAuthenticated()) {
