@@ -220,6 +220,20 @@ public class Apis {
                 )
         );
     }
+    @PostMapping("/set_password")
+    public ResponseEntity<HttpResponse> setStaffPassword(@RequestBody IdnPassword idnPassword)
+    {
+        String msg = staffService.saveStaffPassword(idnPassword);
+        return (
+                ResponseEntity.ok().body(HttpResponse.builder()
+                        .message(msg)
+                        .requestMethod("POST")
+                        .status(HttpStatus.CREATED)
+                        .statusCode(HttpStatus.CREATED.value())
+                        .build()
+                )
+        );
+    }
     @PostMapping("/api/staffs/photo")
     public ResponseEntity<HttpResponse> storePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam("id") Long staffId)
     {
