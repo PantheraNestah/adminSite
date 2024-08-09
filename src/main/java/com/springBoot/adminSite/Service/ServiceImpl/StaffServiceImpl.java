@@ -37,7 +37,7 @@ public class    StaffServiceImpl implements StaffService {
         staffEntity.setDepartment(staff.getDepartment());
         staffRepo.save(staffEntity);
         staffSetPasswordMail(staff.getEmail());
-        return ("\n\n\t\tStaff saved successfully");
+        return ("Staff saved successfully");
     }
     @Override
     public String registerStaffs(List<StaffDto> staffDtos) {
@@ -98,7 +98,6 @@ public class    StaffServiceImpl implements StaffService {
 
     @Override
     public Staff findUserByEmail(String email) {
-        System.out.println("\n\n" + email + "\n");
         Staff staffEntity = staffRepo.findByEmail(email);
         return (staffEntity);
     }

@@ -45,7 +45,7 @@ public class EmailServiceImpl implements EmailService {
             msgHelper.setTo(staffDto.getEmail());
             msgHelper.setPriority(1);
 
-            String urlLink = String.format("%s/meladen/staff/setPassword?id=%d", mailHost, staffDto.getId());
+            String urlLink = String.format("%s/set_password?id=%d", mailHost, staffDto.getId());
             Context ctx = new Context();
             ctx.setVariables(Map.of("passwordLink", urlLink, "staffname", staffDto.getName()));
             String mailText = templateEngine.process("staffMailTemplate.html", ctx);
