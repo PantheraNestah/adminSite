@@ -1,0 +1,42 @@
+version: '2'
+services:
+    mysql:
+      image: mysql:8.0
+      container_name: meladen_db
+      environment:
+        MYSQL_ROOT_PASSWORD: panthera@2024
+        MYSQL_DATABASE: projectmeladen
+        MYSQL_USER: nesta
+        MYSQL_PASSWORD: "*panthera-db1*"
+      volumes:
+        - mysql_cont_data:/var/lib/mysql
+      ports:
+        - "3305:3306"
+      networks:
+        - mynetwork
+    adminsite-server:
+      image: adminsite-server:latest
+      container_name: adminsite-server
+      depends_on:
+        - mysql
+      environment:
+        SPRING_DATASOURCE_URL: jdbc:mysql://meladen_db:3306/projectmeladen
+        SPRING_DATASOURCE_USERNAME: nesta
+        SPRING_DATASOURCE_PASSWORD: "*panthera-db1*"
+      volumes:
+        - /root/Documents/pRogs/javaProgs/adminSite/src/main/resources/keystore.p12
+      build:
+        context: ./
+        dockerfile: dev.Dockerfile
+      ports:
+        - "8443:8443"
+      networks:
+        - mynetwork
+networks:
+  mynetwork:
+    driver: bridge
+
+volumes:
+  mysql_cont_data:
+    external: true
+    name: mysql_cont_data
