@@ -21,13 +21,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtService {
-    private final long token_duration_hours = 1;
     private final long token_duration_sec = 2 * 60 * 60;
-    //private final LocalDateTime now = LocalDateTime.now();
-    //private final LocalDateTime expiryTime = now.plusHours(token_duration_hours + 3);
-    //private final ZonedDateTime zonedExpiryTime = expiryTime.atZone(ZoneId.systemDefault());
-    //private final Date token_expiry = new Date(System.currentTimeMillis() +
-    // token_duration_millis);
     private final Date token_expiry = Date.from(Instant.now().plusSeconds(token_duration_sec));
     public static final String SECRET =
             "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";

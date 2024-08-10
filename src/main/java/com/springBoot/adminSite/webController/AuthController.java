@@ -31,13 +31,12 @@ public class AuthController {
 
     @PostMapping("/generateToken")
     public ResponseEntity<HttpResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-        System.out.println("\n\n\t" + authRequest + "\n");
+        //System.out.println("\n\n\t" + authRequest + "\n");
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
         Map<String, Object> auth_details = new HashMap<>();
         if (authentication.isAuthenticated()) {
             auth_details = jwtService.generateToken(authRequest.getUsername());
             String token = auth_details.get("token").toString();
-            System.out.println("\n\n\t\t" + token + "\n\n");
             return (
                 ResponseEntity.ok().body(HttpResponse.builder()
                                 .message(token)

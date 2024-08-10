@@ -1,6 +1,8 @@
 package com.springBoot.adminSite.Service.ServiceImpl;
 
+import jakarta.annotation.PostConstruct;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,19 @@ import java.nio.file.Paths;
 
 @Service
 public class FilesService {
-    private final Path rootLocation1 = Paths.get("C:\\Users\\hp\\Documents\\pRogs\\javaProgs\\adminSite_file_storage\\admin_profiles");
-    private final Path rootLocation2 = Paths.get("C:\\Users\\hp\\Documents\\pRogs\\javaProgs\\adminSite_file_storage\\projects_photos");
+    @Value("${PROJ_FILES}")
+    private String PROJ_FILES;
+    @Value("${ADMIN_FILES}")
+    private String ADMIN_FILES;
+    private Path rootLocation1;
+    private Path rootLocation2;
+
+    @PostConstruct
+    public void init()
+    {
+        this.rootLocation1 = Paths.get(ADMIN_FILES);
+        this.rootLocation2 = Paths.get(PROJ_FILES);
+    }
     public String saveStaffPhoto(MultipartFile file)
     {
         try {

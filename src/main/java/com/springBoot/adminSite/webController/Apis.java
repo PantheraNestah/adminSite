@@ -140,7 +140,6 @@ public class Apis {
     @PostMapping("/api/clients/email")
     public ResponseEntity<HttpResponse> emailClientsPerProj(@RequestBody MessageDto messageDto)
     {
-        System.out.println("\n\n\t" + messageDto + "\n\n");
         String msg = clientService.bulkClientMail(messageDto);
 
         return (
@@ -208,7 +207,7 @@ public class Apis {
     }
     @PostMapping("/api/staffs/edit")
     public ResponseEntity<HttpResponse> editStaff(@RequestBody StaffDto staffDto) {
-        System.out.println("\n\n\t\t" + staffDto + "\n\n");
+        //System.out.println("\n\n\t\t" + staffDto + "\n\n");
         String msg = staffService.updateStaff(staffDto);
         return (
                 ResponseEntity.ok().body(HttpResponse.builder()
