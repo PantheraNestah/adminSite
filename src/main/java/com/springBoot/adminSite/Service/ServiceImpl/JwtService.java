@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 @Component
 public class JwtService {
-    private final long token_duration_sec = 2 * 60 * 60;
+    private final long token_duration_sec = 2 * 60 * 2;
     private final Date token_expiry = Date.from(Instant.now().plusSeconds(token_duration_sec));
     public static final String SECRET =
             "5367566B59703373367639792F423F4528482B4D6251655468576D5A71347437";
