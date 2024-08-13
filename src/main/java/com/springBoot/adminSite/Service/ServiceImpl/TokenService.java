@@ -24,7 +24,7 @@ public class TokenService {
 
     public Map<String, Object> generateToken(Authentication authentication) {
         Instant now = Instant.now();
-        Instant token_expiry = now.plus(3, ChronoUnit.MINUTES);
+        Instant token_expiry = now.plus(2, ChronoUnit.HOURS);
         String scope = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(""));
