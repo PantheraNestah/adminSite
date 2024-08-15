@@ -1,9 +1,11 @@
 package com.springBoot.adminSite.webController;
 
 import com.springBoot.adminSite.Dto.HttpResponse;
+import com.springBoot.adminSite.Dto.StaffDto;
 import com.springBoot.adminSite.SecurityConfig.AuthRequest;
 import com.springBoot.adminSite.Service.ServiceImpl.StaffDetailsService2;
 import com.springBoot.adminSite.Service.ServiceImpl.TokenService;
+import com.springBoot.adminSite.Service.StaffService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,22 +28,24 @@ import java.util.Map;
 public class AuthController {
     private static final Logger Log = LoggerFactory.getLogger(AuthController.class);
     @Autowired
-    private StaffDetailsService2 staffDetailsService2;
-    @Autowired
     private AuthenticationManager authenticationManager;
     private final TokenService tokenService;
+    private StaffService staffService;
 
-    public AuthController(TokenService tokenService) {
+    public AuthController(TokenService tokenService, StaffService staffService1) {
         this.tokenService = tokenService;
+        this.staffService = staffService1;
     }
 
     @PostMapping("/generateToken")
     public ResponseEntity<HttpResponse> authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+        StaffDto staffDto = staffService.findStaffByEmail(authRequest.getUsername());
         Map<String, Object> auth_details = new HashMap<>();
         if (authentication.isAuthenticated()) {
             Log.debug("Token Requested for user: '{}'", authentication.getName());
             auth_details = tokenService.generateToken(authentication);
+            auth_details.put("staff_data", staffDto);
             String token = auth_details.get("token").toString();
             Log.debug("Token granted: {}", token);
             return (

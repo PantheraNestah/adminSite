@@ -13,7 +13,7 @@ public interface StaffService {
     String registerStaff(StaffDto staff);
     String registerStaffs(List<StaffDto> staffDtos);
     String updateStaff(StaffDto staffDto);
-    String updatePhoto(MultipartFile file, Long staffId);
+    String updatePhoto(MultipartFile file, String email);
     public Resource retrieveStaffPhoto(String filename);
     String staffSetPasswordMail(String eMail);
     String saveStaffPassword(IdnPassword idnPassword);

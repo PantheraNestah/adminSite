@@ -61,13 +61,13 @@ public class    StaffServiceImpl implements StaffService {
         return ("Staff details successfully updated");
     }
     @Override
-    public String updatePhoto(MultipartFile file, Long staffId)
+    public String updatePhoto(MultipartFile file, String email)
     {
         String expectedMsg = "File: " + file.getOriginalFilename() + " saved successfully";
         String msg = filesService.saveStaffPhoto(file);
         if(msg.equals(expectedMsg))
         {
-            Staff staff = staffRepo.findById(staffId).get();
+            Staff staff = staffRepo.findByEmail(email);
             staff.setProfileImage(file.getOriginalFilename());
             staffRepo.save(staff);
         }
