@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -23,14 +25,17 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     private FilesService filesService;
     @Override
-    public String registerProject(ProjectDto projectDto) {
+    public Map<String, Object> registerProject(ProjectDto projectDto) {
         Project projectEntity = new Project();
         projectEntity.setName(projectDto.getProdName());
         projectEntity.setValue(projectDto.getProdValue());
         projectEntity.setPhoto(projectDto.getPhoto());
         projectEntity.setDateCreated(projectDto.getCreationDate());
-        projectRepo.save(projectEntity);
-        return ("Project Registration Successful");
+        Project project = projectRepo.save(projectEntity);
+        Map<String, Object> result = new HashMap<>();
+        result.put("id", project.getId());
+        result.put("msg", "Project Registration Successful");
+        return (result);
     }
     @Override
     public String updateProject(ProjectDto projectDto)
