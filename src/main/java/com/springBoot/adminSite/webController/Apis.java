@@ -40,11 +40,14 @@ public class Apis {
     @PostMapping("/api/projects/new")
     public ResponseEntity<HttpResponse> registerProject(@RequestBody ProjectDto projectDto)
     {
-        String msg = projectService.registerProject(projectDto);
+        Map<String, Object> result = projectService.registerProject(projectDto);
+        String msg = result.get("msg").toString();
+        Long id = (Long) result.get("id");
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
+                        .data(Map.of("id", id))
                         .status(HttpStatus.CREATED)
                         .statusCode(HttpStatus.CREATED.value())
                         .build()
@@ -56,7 +59,7 @@ public class Apis {
     {
         String msg = projectService.registerProjects(projectDtos);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -70,7 +73,7 @@ public class Apis {
     {
         String msg = projectService.updateProject(projectDto);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -84,7 +87,7 @@ public class Apis {
     {
         String msg = projectService.saveProjectPhoto(file, projectName);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -112,7 +115,7 @@ public class Apis {
     {
         String msg = clientService.registerClient(clientDto);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                                 .message(msg)
                                 .requestMethod("POST")
                                 .status(HttpStatus.CREATED)
@@ -128,7 +131,7 @@ public class Apis {
         String msg = clientService.bulkClientSms(messageDto);
 
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -143,7 +146,7 @@ public class Apis {
         String msg = clientService.bulkClientMail(messageDto);
 
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -157,7 +160,7 @@ public class Apis {
     {
         String msg = clientService.registerClients(clientDtos);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -183,7 +186,7 @@ public class Apis {
     public ResponseEntity<HttpResponse> registerStaff(@RequestBody StaffDto staffDto) {
         String msg = staffService.registerStaff(staffDto);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -196,7 +199,7 @@ public class Apis {
     public ResponseEntity<HttpResponse> registerManyStaff(@RequestBody List<StaffDto> staffDto) {
         String msg = staffService.registerStaffs(staffDto);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -210,7 +213,7 @@ public class Apis {
         //System.out.println("\n\n\t\t" + staffDto + "\n\n");
         String msg = staffService.updateStaff(staffDto);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -224,7 +227,7 @@ public class Apis {
     {
         String msg = staffService.saveStaffPassword(idnPassword);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
@@ -234,11 +237,12 @@ public class Apis {
         );
     }
     @PostMapping("/api/staffs/photo")
-    public ResponseEntity<HttpResponse> storePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam("id") Long staffId)
+    public ResponseEntity<HttpResponse> storePhoto(@RequestParam("file") MultipartFile multipartFile, @RequestParam("id") String email)
     {
-        String msg = staffService.updatePhoto(multipartFile, staffId);
+        System.out.println("\n\n\t" + email + "\t" + multipartFile + "\n\n");
+        String msg = staffService.updatePhoto(multipartFile, email);
         return (
-                ResponseEntity.ok().body(HttpResponse.builder()
+                ResponseEntity.status(HttpStatus.CREATED).body(HttpResponse.builder()
                         .message(msg)
                         .requestMethod("POST")
                         .status(HttpStatus.CREATED)
